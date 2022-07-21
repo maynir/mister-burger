@@ -2,8 +2,9 @@
   "name": "mister-burger",
   "version": "1.0.0",
   "description": "",
-  "main": "sServer.js",
+  "main": "server/index.js",
   "scripts": {
+    "start": "node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,8 +18,10 @@
   },
   "homepage": "https://github.com/maynir/mister-burger#readme",
   "dependencies": {
+    "create-react-app": "^5.0.1",
     "express": "^4.18.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "sass": "^1.53.0"
   }
 }
