@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/maynir/mister-burger/issues"
   },
-  "homepage": "https://github.com/maynir/mister-burger#readme"
+  "homepage": "https://github.com/maynir/mister-burger#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
 }
