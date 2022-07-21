@@ -2,14 +2,18 @@ const express = require('express');
 const app = express();
 const port = 3001;
 app.use('/', express.static(__dirname + '/'));
-app.listen(port, () => {
-  console.log(`Listening on port: ${port}`);
-})
+
+app.get("/api", (req, res) => {
+  res.json({ message: "Hello from server!" });
+});
 
 app.get('/', (req, res) => {
   res.send('MisteR Burger');
 })
 
+app.listen(port, () => {
+  console.log(`Listening on port: ${port}`);
+})
 // let value = 0;
 
 // app.use('/value', (_req, res) => {
