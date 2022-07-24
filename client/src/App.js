@@ -7,6 +7,7 @@ import StoreHeader from './components/StoreHeader/StoreHeader';
 function App() {
   const [data, setData] = React.useState(null);
   const [isLogIn, setIsLogIn] = React.useState(false);
+  const [isAdmin, setIsAdmin] = React.useState(false);
   const [selectedPage, setSelectedPage] = React.useState('store');
 
   const headerRef = useRef();
@@ -19,10 +20,14 @@ function App() {
 
   return (
     <div className="App">
-      <Navigator isLogIn={isLogIn} setSelectedPage={setSelectedPage} headerRef={headerRef}/>
-      <StoreHeader headerRef={headerRef}/>
-      {selectedPage === 'logIn' && <Login/>}
-      {selectedPage === 'store' && <Store/>}
+      <Navigator
+        isLogIn={isLogIn}
+        setSelectedPage={setSelectedPage}
+        headerRef={headerRef}
+        isAdmin={isAdmin} />
+      <StoreHeader headerRef={headerRef} />
+      {selectedPage === 'logIn' && <Login />}
+      {selectedPage === 'store' && <Store />}
       <p>{!data ? "Loading..." : data}</p>
     </div>
   );
