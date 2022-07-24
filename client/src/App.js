@@ -4,6 +4,8 @@ import Navigator from './components/Navigator/Navigator';
 import Login from './components/Login/Login';
 import Store from './components/Store/Store';
 import StoreHeader from './components/StoreHeader/StoreHeader';
+import SignIn from './components/SignIn/SignIn';
+
 function App() {
   const [data, setData] = React.useState(null);
   const [isLogIn, setIsLogIn] = React.useState(false);
@@ -28,6 +30,7 @@ function App() {
       <StoreHeader headerRef={headerRef} />
       {selectedPage === 'logIn' && <Login />}
       {selectedPage === 'store' && <Store />}
+      {selectedPage === 'signIn' && <SignIn />}
       <p>{!data ? "Loading..." : data}</p>
     </div>
   );
