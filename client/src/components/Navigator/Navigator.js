@@ -20,9 +20,9 @@ const Navigator = ({ headerRef, isLogin, setSelectedPage, isAdmin }) => {
       <button className="tab" onClick={() => changePage('contactUs')}>Contact Us</button>
       {isAdmin && <button className="tab" onClick={() => changePage('admin')}>Admin</button>}
       <button className="tab" onClick={() => changePage('checkOut')}>Check Out</button>
-      <button className="tab" onClick={() => changePage('signIn')}>Sign In</button>
-      <button className="tab" onClick={() => changePage('login')}>Log In</button>
-      <button className="tab" onClick={() => changePage('logOut')}>Log Out</button>
+      {!isLogin && <button className="tab" onClick={() => changePage('signIn')}>Sign In</button>}
+      {!isLogin && <button className="tab" onClick={() => changePage('login')}>Log In</button>}
+      {isLogin && <button className="tab" onClick={() => changePage('logOut')}>Log Out</button>}
       <button className="up" onClick={() => jumpTo(headerRef)}>UP</button>
     </div>
   );
