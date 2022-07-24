@@ -1,7 +1,7 @@
 import './SignIn.scss';
 import { useState, useEffect } from 'react';
 
-const SignIn = ({ SignInRef }) => {
+const SignIn = ({setSelectedPage}) => {
     const initialData = {
       email: '',
       password: '',
@@ -65,7 +65,7 @@ const SignIn = ({ SignInRef }) => {
   }, [validation, data]);
 
   return (
-    <div className="SignIn" id="SignIn" ref={SignInRef}>
+    <div className="SignIn" id="SignIn">
       {showAlert && <div className="alert"  >
         <span className="closebtn" onClick={() => setShowAlert(false)}>&times;</span>
         An email just sent to me! Thank you for filling the form.
@@ -95,9 +95,12 @@ const SignIn = ({ SignInRef }) => {
           onFocus={handleFocus}
         />
 
-        <button disabled={!sumbitEnabled} type='submit'>
+        <div className="navigator-container">
+          <button className="navigator" onClick={() => setSelectedPage('login')}>Login</button>
+        </div>
+        <button className="login-button"  disabled={!sumbitEnabled} type='submit'>
           {showLoader && <i className="fa fa-spinner fa-spin"></i>}
-          Submit
+          Sign In
         </button>
       </form>
     </div>

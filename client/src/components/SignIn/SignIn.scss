@@ -74,16 +74,23 @@
     }
 
     button {
-      width: 200px;
-      height: 45px;
       border: none;
       transition: all 0.3s;
-      font-weight: bold;
       background-color: #1f2c28;
       color: #9b9b9b;
-      font-size: 20px;
       border-radius: 4px;
-      margin-top: 15px;
+
+      &.navigator {
+        background-color: transparent;
+      }
+
+      &.login-button {
+        width: 200px;
+        height: 45px;
+        font-weight: bold;
+        font-size: 20px;
+        margin-top: 15px;
+      }
 
       &:enabled:hover {
         color: white;
