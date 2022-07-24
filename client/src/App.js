@@ -1,8 +1,15 @@
 import './App.css';
-import React from "react";
-
+import React, { useRef } from "react";
+import Navigator from './components/Navigator/Navigator';
+import Login from './components/Login/Login';
+import Store from './components/Store/Store';
+import StoreHeader from './components/StoreHeader/StoreHeader';
 function App() {
   const [data, setData] = React.useState(null);
+  const [isLogIn, setIsLogIn] = React.useState(false);
+  const [selectedPage, setSelectedPage] = React.useState('store');
+
+  const headerRef = useRef();
 
   React.useEffect(() => {
     fetch("/api")
@@ -12,9 +19,11 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <p>{!data ? "Loading..." : data}</p>
-      </header>
+      <Navigator isLogIn={isLogIn} setSelectedPage={setSelectedPage} headerRef={headerRef}/>
+      <StoreHeader headerRef={headerRef}/>
+      {selectedPage === 'logIn' && <Login/>}
+      {selectedPage === 'store' && <Store/>}
+      <p>{!data ? "Loading..." : data}</p>
     </div>
   );
 }
