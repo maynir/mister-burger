@@ -1,9 +1,30 @@
 const express = require('express');
 const app = express();
 const port = 3001;
+const fs = require('fs');
+const bp = require('body-parser')
+
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
 app.use('/', express.static(__dirname + '/'));
 
 app.get("/api", (req, res) => {
+  res.json({ message: "Hello from server!" });
+});
+
+app.post("/sign-in", (req, res) => {
+  console.log(req.body);
+  const userData = {};
+  userData[req.body.email] = req.body.password;
+  // const userData = { email: req.body.email, password: req.body.password };
+  fs.writeFile('./users.json', JSON.stringify(userData), 'utf8', function (err) {
+    if (err) {
+      console.log("An error occured while writing JSON Object to File.");
+      return console.log(err);
+    }
+
+    console.log("JSON file has been saved.");
+  });
   res.json({ message: "Hello from server!" });
 });
 
@@ -12,29 +33,5 @@ app.get('/', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`Listening on port: ${port}`);
+  console.log(`Listening on port: ${ port }`);
 })
-// let value = 0;
-
-// app.use('/value', (_req, res) => {
-//   res.send({ value });
-// })
-
-// app.post('/calc/:operator/:num', (req, res) => {
-//   const operator = req.params.operator;
-//   const num = parseInt(req.params.num);
-
-//   if (operator == 'multiply') {
-//     value *= num;
-//   } else if (operator == 'plus') {
-//     value += num;
-//   } else if (operator == 'minus') {
-//     value -= num;
-//   }
-//   res.send({ value });
-// })
-
-// app.post('/clear', (_req, res) => {
-//   value = 0;
-//   res.send({ value });
-// })

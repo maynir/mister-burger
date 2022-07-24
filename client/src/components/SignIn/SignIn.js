@@ -1,11 +1,12 @@
 import './SignIn.scss';
 import { useState, useEffect } from 'react';
+const axios = require('axios');
 
-const SignIn = ({setSelectedPage}) => {
-    const initialData = {
-      email: '',
-      password: '',
-    };
+const SignIn = ({ setSelectedPage }) => {
+  const initialData = {
+    email: '',
+    password: '',
+  };
 
   const initialValidation = {
     email: '',
@@ -22,6 +23,9 @@ const SignIn = ({setSelectedPage}) => {
     e.preventDefault();
     setSumbitEnabled(false);
     setLoader(true);
+    axios.post('/sign-in', data);
+    // fetch("/sign-in", { method: 'POST', body: JSON.stringify(data) })
+    //   .then((res) => console.log(res.json()))
     // send(
     //   'service_6vfmncl',
     //   'template_qafpzpk',
@@ -98,7 +102,7 @@ const SignIn = ({setSelectedPage}) => {
         <div className="navigator-container">
           <button className="navigator" onClick={() => setSelectedPage('login')}>Login</button>
         </div>
-        <button className="login-button"  disabled={!sumbitEnabled} type='submit'>
+        <button className="login-button" disabled={!sumbitEnabled} type='submit'>
           {showLoader && <i className="fa fa-spinner fa-spin"></i>}
           Sign In
         </button>
