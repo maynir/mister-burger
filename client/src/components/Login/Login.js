@@ -1,41 +1,33 @@
 import './Login.scss';
 import { useState, useEffect } from 'react';
+const axios = require('axios');
 
-const Login = ({setSelectedPage}) => {
-    const initialData = {
-      email: '',
-      password: '',
-    };
+const Login = ({ setSelectedPage, setIsLoggedIn }) => {
+  const initialData = {
+    email: '',
+    password: '',
+    rememberMe: false
+  };
 
   const [data, setData] = useState(initialData);
   const [sumbitEnabled, setSumbitEnabled] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [showLoader, setLoader] = useState(false);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     setSumbitEnabled(false);
     setLoader(true);
-    // send(
-    //   'service_6vfmncl',
-    //   'template_qafpzpk',
-    //   toSend,
-    //   'user_O5llRtB6936quwnSxnYFh'
-    // )
-    //   .then((response) => {
-    //     console.log('SUCCESS!', response.status, response.text);
-    //     setToSend(initialToSend);
-    //     setSumbitEnabled(true);
-    //     setShowAlert(true);
-    //     setLoader(false);
-
-    //     setTimeout(() => {
-    //       setShowAlert(false);
-    //     }, 10000);
-    //   })
-    //   .catch((err) => {
-    //     console.log('FAILED...', err);
-    //   });
+    try {
+      await axios.post('/login', data);
+      setSelectedPage('store');
+      setIsLoggedIn(true);
+      alert(`Welcome ${data.email}!`);
+    } catch (err) {
+      setSumbitEnabled(true);
+      setLoader(false);
+      alert('Wrong email or password...')
+    }
   };
 
   const handleChange = (e) => {
@@ -67,10 +59,19 @@ const Login = ({setSelectedPage}) => {
           type='password'
           name='password'
           placeholder='Your Password'
-          value={data.phone}
+          value={data.password}
           onChange={handleChange}
           autoComplete="off"
         />
+        <div className='remember-me'>
+          <label>Remember Me:</label>
+          <input
+            type='checkbox'
+            name='rememberMe'
+            value={data.rememberMe}
+            onChange={handleChange}
+          />
+        </div>
         <div className="navigator-container">
           <button className="navigator" onClick={() => setSelectedPage('signIn')}>Sign In</button>
         </div>

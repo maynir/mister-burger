@@ -19,33 +19,19 @@ const SignIn = ({ setSelectedPage }) => {
   const [showAlert, setShowAlert] = useState(false);
   const [showLoader, setLoader] = useState(false);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     setSumbitEnabled(false);
     setLoader(true);
-    axios.post('/sign-in', data);
-    // fetch("/sign-in", { method: 'POST', body: JSON.stringify(data) })
-    //   .then((res) => console.log(res.json()))
-    // send(
-    //   'service_6vfmncl',
-    //   'template_qafpzpk',
-    //   toSend,
-    //   'user_O5llRtB6936quwnSxnYFh'
-    // )
-    //   .then((response) => {
-    //     console.log('SUCCESS!', response.status, response.text);
-    //     setToSend(initialToSend);
-    //     setSumbitEnabled(true);
-    //     setShowAlert(true);
-    //     setLoader(false);
-
-    //     setTimeout(() => {
-    //       setShowAlert(false);
-    //     }, 10000);
-    //   })
-    //   .catch((err) => {
-    //     console.log('FAILED...', err);
-    //   });
+    try {
+      await axios.post('/sign-in', data);
+      setSelectedPage('login');
+      alert('Signed in successfully, please login to continue');
+    } catch (err) {
+      setSumbitEnabled(true);
+      setLoader(false);
+      alert('Sorry, something went wrong...')
+    }
   };
 
   const handleChange = (e) => {
@@ -92,13 +78,12 @@ const SignIn = ({ setSelectedPage }) => {
           type='password'
           name='password'
           placeholder='Your Password'
-          value={data.phone}
+          value={data.password}
           onChange={handleChange}
           autoComplete="off"
           onBlur={handleBlur}
           onFocus={handleFocus}
         />
-
         <div className="navigator-container">
           <button className="navigator" onClick={() => setSelectedPage('login')}>Login</button>
         </div>

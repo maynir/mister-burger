@@ -8,7 +8,7 @@ import SignIn from './components/SignIn/SignIn';
 
 function App() {
   const [data, setData] = React.useState(null);
-  const [isLogin, setIsLogin] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isAdmin, setIsAdmin] = React.useState(false);
   const [selectedPage, setSelectedPage] = React.useState('store');
 
@@ -23,12 +23,12 @@ function App() {
   return (
     <div className="App">
       <Navigator
-        isLogin={isLogin}
+        isLoggedIn={isLoggedIn}
         setSelectedPage={setSelectedPage}
         headerRef={headerRef}
         isAdmin={isAdmin} />
       <StoreHeader headerRef={headerRef} />
-      {selectedPage === 'login' && <Login setSelectedPage={setSelectedPage} />}
+      {selectedPage === 'login' && <Login setSelectedPage={setSelectedPage} setIsLoggedIn={setIsLoggedIn}/>}
       {selectedPage === 'store' && <Store />}
       {selectedPage === 'signIn' && <SignIn setSelectedPage={setSelectedPage}/>}
       <p>{!data ? "Loading..." : data}</p>

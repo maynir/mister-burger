@@ -2,7 +2,7 @@ import './Navigator.scss';
 import React, { useRef } from 'react';
 import classNames from 'classnames';
 
-const Navigator = ({ headerRef, isLogin, setSelectedPage, isAdmin }) => {
+const Navigator = ({ headerRef, isLoggedIn, setSelectedPage, isAdmin }) => {
   const jumpTo = (ref) => {
     ref.current.scrollIntoView({ behavior: 'smooth' });
   };
@@ -20,9 +20,9 @@ const Navigator = ({ headerRef, isLogin, setSelectedPage, isAdmin }) => {
       <button className="tab" onClick={() => changePage('contactUs')}>Contact Us</button>
       {isAdmin && <button className="tab" onClick={() => changePage('admin')}>Admin</button>}
       <button className="tab" onClick={() => changePage('checkOut')}>Check Out</button>
-      {!isLogin && <button className="tab" onClick={() => changePage('signIn')}>Sign In</button>}
-      {!isLogin && <button className="tab" onClick={() => changePage('login')}>Log In</button>}
-      {isLogin && <button className="tab" onClick={() => changePage('logOut')}>Log Out</button>}
+      {!isLoggedIn && <button className="tab" onClick={() => changePage('signIn')}>Sign In</button>}
+      {!isLoggedIn && <button className="tab" onClick={() => changePage('login')}>Log In</button>}
+      {isLoggedIn && <button className="tab" onClick={() => changePage('logOut')}>Log Out</button>}
       <button className="up" onClick={() => jumpTo(headerRef)}>UP</button>
     </div>
   );

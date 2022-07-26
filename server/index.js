@@ -3,8 +3,8 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const port = 3001;
 const fs = require('fs');
-const bp = require('body-parser')
 const sessions = {};
+const USERS_FILE = './users.json';
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -20,14 +20,26 @@ app.post("/sign-in", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   userData[email] = password;
-  fs.writeFile('./users.json', JSON.stringify(userData), 'utf8', function (err) {
+  fs.writeFile(USERS_FILE, JSON.stringify(userData), 'utf8', function (err) {
     if (err) {
-      console.log("An error occured while writing JSON Object to File.");
+      console.log("An error occured while writing Users JSON Object to File.");
       return console.log(err);
     }
     console.log(`Created new user with email: ${ email }`);
   });
-  setCookieAndSession(email, password, res);
+  res.end();
+});
+
+app.post("/login", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  const rememberMe = req.body.rememberMe;
+
+  if (verifyUser(email, password)) {
+    setCookieAndSession(email, password, rememberMe, res);
+  } else {
+    res.statusCode = 404
+  }
   res.end();
 });
 
@@ -39,10 +51,17 @@ app.listen(port, () => {
   console.log(`Listening on port: ${ port }`);
 })
 
-function setCookieAndSession(email, password, res) {
+function setCookieAndSession(email, password, rememberMe, res) {
+  const experationTime = rememberMe ? 1000 * 60 * 60 * 24 * 10 : 1000 * 60 * 30;
   res.cookie('email', email);
   sessions[email] = password;
   setTimeout(() => {
     delete sessions[email];
-  }, 1000 * 60 * 30);
+  }, experationTime);
+}
+
+function verifyUser(email, password) {
+  let rawUsersData = fs.readFileSync(USERS_FILE);
+  let usersData = JSON.parse(rawUsersData);
+  return usersData[email] && usersData[email] === password;
 }
