@@ -30,7 +30,11 @@ const SignIn = ({ setSelectedPage }) => {
     } catch (err) {
       setSumbitEnabled(true);
       setLoader(false);
-      alert('Sorry, something went wrong...')
+      if (err.status === 303) {
+        alert('User with this email already exist')
+      } else {
+        alert('Sorry, something went wrong...');
+      }
     }
   };
 

@@ -1,14 +1,26 @@
 import './Navigator.scss';
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import classNames from 'classnames';
+const axios = require('axios');
 
-const Navigator = ({ headerRef, isLoggedIn, setSelectedPage, isAdmin }) => {
+const Navigator = ({ headerRef, isLoggedIn, setSelectedPage, isAdmin, setIsLoggedIn, setLoggedInEmail }) => {
   const jumpTo = (ref) => {
     ref.current.scrollIntoView({ behavior: 'smooth' });
   };
 
   const changePage = (page) => {
     setSelectedPage(page);
+  }
+
+  const logOut = async () => {
+    try {
+      await axios.post('/log-out');
+      setIsLoggedIn(false);
+      setLoggedInEmail(null);
+      alert('Logged out successfuly');
+    } catch (err) {
+      alert('Couldnt log out...')
+    }
   }
 
   return (
@@ -22,7 +34,7 @@ const Navigator = ({ headerRef, isLoggedIn, setSelectedPage, isAdmin }) => {
       <button className="tab" onClick={() => changePage('checkOut')}>Check Out</button>
       {!isLoggedIn && <button className="tab" onClick={() => changePage('signIn')}>Sign In</button>}
       {!isLoggedIn && <button className="tab" onClick={() => changePage('login')}>Log In</button>}
-      {isLoggedIn && <button className="tab" onClick={() => changePage('logOut')}>Log Out</button>}
+      {isLoggedIn && <button className="tab" onClick={() => logOut()}>Log Out</button>}
       <button className="up" onClick={() => jumpTo(headerRef)}>UP</button>
     </div>
   );
