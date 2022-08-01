@@ -2,7 +2,7 @@ import './Login.scss';
 import { useState, useEffect } from 'react';
 const axios = require('axios');
 
-const Login = ({ setSelectedPage, setIsLoggedIn }) => {
+const Login = ({ setSelectedPage, setIsLoggedIn, setLoggedInEmail }) => {
   const initialData = {
     email: '',
     password: '',
@@ -22,6 +22,7 @@ const Login = ({ setSelectedPage, setIsLoggedIn }) => {
       await axios.post('/login', data);
       setSelectedPage('store');
       setIsLoggedIn(true);
+      setLoggedInEmail(data.email);
       alert(`Welcome ${data.email}!`);
     } catch (err) {
       setSumbitEnabled(true);

@@ -1,10 +1,11 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const md5 = require('md5');
 const app = express();
 const port = 3001;
 const fs = require('fs');
 const sessions = {};
-const USERS_FILE = './users.json';
+const USERS_FILE = './server/users.json';
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -12,14 +13,30 @@ app.use('/', express.static(__dirname + '/'));
 app.use(cookieParser());
 
 app.get("/api", (req, res) => {
+  console.log('api');
   res.json({ message: "Hello from server!" });
 });
+
+app.get('/username', (req, res, next) => {
+  console.log(sessions[(req.cookies)?.shortPass]);
+  res.json({ email: sessions[(req.cookies)?.shortPass] || "" });
+  next();
+})
 
 app.post("/sign-in", (req, res) => {
   const userData = {};
   const email = req.body.email;
+
+  let rawUsersData = fs.readFileSync(USERS_FILE);
+  let usersData = JSON.parse(rawUsersData);
+  if (usersData[email]) {
+    res.statusCode = 303;
+    res.end();
+  }
+
   const password = req.body.password;
   userData[email] = password;
+
   fs.writeFile(USERS_FILE, JSON.stringify(userData), 'utf8', function (err) {
     if (err) {
       console.log("An error occured while writing Users JSON Object to File.");
@@ -37,26 +54,43 @@ app.post("/login", (req, res) => {
 
   if (verifyUser(email, password)) {
     setCookieAndSession(email, password, rememberMe, res);
+    res.statusCode = 201;
   } else {
-    res.statusCode = 404
+    res.statusCode = 404;
   }
   res.end();
 });
 
-app.get('/', (req, res) => {
-  res.send('MisteR Burger');
-})
+app.post("/log-out", (req, res) => {
+  console.log(req.cookies)
+  const shortPass = (req.cookies)?.shortPass;
+
+  if (sessions[shortPass]) {
+    delete sessions[shortPass];
+    res.clearCookie('shortPass');
+    console.log("logged out")
+  } else {
+    console.log("user wasnt logged in")
+  }
+  res.end();
+});
 
 app.listen(port, () => {
   console.log(`Listening on port: ${ port }`);
 })
 
+app.use('/', (req, res, next) => {
+  console.log('test');
+  next();
+})
+
 function setCookieAndSession(email, password, rememberMe, res) {
   const experationTime = rememberMe ? 1000 * 60 * 60 * 24 * 10 : 1000 * 60 * 30;
-  res.cookie('email', email);
-  sessions[email] = password;
+  const shortPass = generateShortPass(password);
+  res.cookie('shortPass', shortPass);
+  sessions[shortPass] = email;
   setTimeout(() => {
-    delete sessions[email];
+    delete sessions[shortPass];
   }, experationTime);
 }
 
@@ -64,4 +98,8 @@ function verifyUser(email, password) {
   let rawUsersData = fs.readFileSync(USERS_FILE);
   let usersData = JSON.parse(rawUsersData);
   return usersData[email] && usersData[email] === password;
+}
+
+function generateShortPass(password) {
+  return md5(password);
 }
