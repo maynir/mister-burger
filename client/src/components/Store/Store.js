@@ -26,9 +26,8 @@ function Store({ setCartItems }) {
 
   const itemList = (type) => {
     return Object.entries(products[type] || {}).map(([product, productInfo]) => {
-      return <div className='item-section'>
-        <Item key={product}
-          productName={product}
+      return <div key={product} className='item-section'>
+        <Item productName={product}
           productDesc={productInfo.description}
           productImg={productInfo.img} />
         <button>Add to Cart</button>
