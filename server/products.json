@@ -1,0 +1,24 @@
+{
+  "main": {
+    "hamburger": {
+      "description": "200 gm meat with onion, tomato, lettuce.",
+      "img": "hamburger.png"
+    },
+    "cheeseburger": {
+      "description": "200 gm meat with cheese, onion, tomato, lettuce.",
+      "img": "cheeseburger.png"
+    }
+  },
+  "side": {
+    "fries": {
+      "description": "Potato fries.",
+      "img": "fries.png"
+    }
+  },
+  "drink": {
+    "coke": {
+      "description": "Coke side drink.",
+      "img": "coke.jpg"
+    }
+  }
+}
