@@ -18,7 +18,7 @@
   "drink": {
     "coke": {
       "description": "Coke side drink.",
-      "img": "coke.jpg"
+      "img": "coke.png"
     }
   }
 }

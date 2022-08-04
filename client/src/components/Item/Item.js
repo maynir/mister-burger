@@ -14,7 +14,7 @@ const Item = ({ productName, productDesc, productImg }) => {
         <div className={classNames('desc')}>{productDesc}</div>
       </div>
       <div className={classNames('img')}>
-        {productImg}
+        <img src={`/images/${productImg}`} alt={productImg} key={productImg}/>
       </div>
     </div>
   );
