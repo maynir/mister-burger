@@ -6,6 +6,7 @@ const port = 3001;
 const fs = require('fs');
 const sessions = {};
 const USERS_FILE = './server/users.json';
+const PRODUCTS_FILE = './server/products.json';
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -77,6 +78,12 @@ app.post("/log-out", (req, res) => {
 
 app.listen(port, () => {
   console.log(`Listening on port: ${ port }`);
+})
+
+app.get('/products', (req, res) => {
+  const rawProductsData = fs.readFileSync(PRODUCTS_FILE);
+  const products = JSON.parse(rawProductsData);
+  res.json({ products });
 })
 
 app.use('/', (req, res, next) => {

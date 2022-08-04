@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Navigator from './components/Navigator/Navigator';
 import Login from './components/Login/Login';
 import Store from './components/Store/Store';
@@ -8,32 +8,40 @@ import SignIn from './components/SignIn/SignIn';
 import axios from 'axios';
 
 function App() {
-  const [data, setData] = React.useState(null);
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-  const [isAdmin, setIsAdmin] = React.useState(false);
-  const [selectedPage, setSelectedPage] = React.useState('store');
-  const [loggedInEmail, setLoggedInEmail] = React.useState(null);
+  const [data, setData] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [selectedPage, setSelectedPage] = useState('store');
+  const [loggedInEmail, setLoggedInEmail] = useState(null);
 
   const headerRef = useRef();
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetch("/api")
       .then((res) => res.json())
       .then((data) => setData(data.message));
   }, []);
 
-  React.useEffect(() => {
-    axios.get("/username")
-      .then(({ data }) => {
-        if (data.email) {
-          setIsLoggedIn(true);
-          if (data.email === 'admin') setIsAdmin(true);
-          setLoggedInEmail(data.email)
-        } else {
-          setIsLoggedIn(false);
-          setLoggedInEmail(null)
-        }
-      })
+  useEffect(() => {
+    const getEmail = async () => {
+      const res = await axios.get("/username");
+      const resEmail = res.data.email;
+
+      if (resEmail) {
+        setIsLoggedIn(true);
+        if (resEmail === 'admin') setIsAdmin(true);
+        setLoggedInEmail(resEmail)
+      } else {
+        setIsLoggedIn(false);
+        setLoggedInEmail(null)
+      }
+    }
+
+    try {
+      getEmail();
+    } catch (err){
+      alert('Something went wrong...')
+    }
   }, [isLoggedIn, loggedInEmail]);
 
   return (

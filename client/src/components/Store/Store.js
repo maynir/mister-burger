@@ -1,11 +1,43 @@
 import './Store.scss';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
+import axios from 'axios';
+import Item from '../Item/Item'
 
-const Store = () => {
+function Store() {
+
+  const [products, setProducts] = useState({});
+
+  useEffect(() => {
+    const getProducts = async () => {
+      const res = await axios.get('/products');
+      setProducts(res.data.products);
+    }
+
+    getProducts();
+  }, [])
+
+  const menuSection = (type) => {
+    return <div className='menu-section'>
+      <div className='menu-section-title'>{type.toUpperCase()}</div>
+      {itemList(type)}
+    </div>
+  }
+
+  const itemList = (type) => {
+    return Object.entries(products[type] || {}).map(([product, productInfo]) => {
+      return <Item key={product}
+        productName={product}
+        productDesc={productInfo.description}
+        productImg={productInfo.img} />
+    });
+  }
+
   return (
     <div className={classNames('Store')}>
-      Store
+      {menuSection('main')}
+      {menuSection('side')}
+      {menuSection('drink')}
     </div>
   );
 }

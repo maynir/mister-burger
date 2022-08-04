@@ -1,19 +1,27 @@
-.Store {
+.Item {
   // position: fixed;
   // top: 0;
   width: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  justify-content: space-around;
+  margin-bottom: 10px;
 
-  .menu-section {
-    .menu-section-title {
+  .info {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    text-align: left;
+
+    .title {
       font-weight: bold;
-      font-size: 23px;
-      margin-bottom: 10px;
-      background-color: #4a5553;
-      color: white;
+      margin-bottom: 3px;
+    }
+  }
+
+  .img {
+    img {
+      width: 150px;
+      height: 120px;
     }
   }
 
