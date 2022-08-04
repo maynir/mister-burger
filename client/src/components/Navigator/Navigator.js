@@ -26,12 +26,13 @@ const Navigator = ({ headerRef, isLoggedIn, setSelectedPage, isAdmin, setIsLogge
   return (
     <div className={classNames('Navigator', 'sticky')}>
       <button className="tab" onClick={() => changePage('store')}>Store</button>
-      <button className="tab" onClick={() => changePage('gallery')}>Gallery</button>
-      <button className="tab" onClick={() => changePage('calories')}>Calories</button>
-      <button className="tab" onClick={() => changePage('lottery')}>Lottery</button>
-      <button className="tab" onClick={() => changePage('contactUs')}>Contact Us</button>
+      {isLoggedIn && <button className="tab" onClick={() => changePage('gallery')}>Gallery</button>}
+      {isLoggedIn && <button className="tab" onClick={() => changePage('calories')}>Calories</button>}
+      {isLoggedIn && <button className="tab" onClick={() => changePage('lottery')}>Lottery</button>}
+      {isLoggedIn && <button className="tab" onClick={() => changePage('contactUs')}>Contact Us</button>}
+      <button className="tab" onClick={() => changePage('readme')}>Readme</button>
       {isAdmin && <button className="tab" onClick={() => changePage('admin')}>Admin</button>}
-      <button className="tab" onClick={() => changePage('checkOut')}>Check Out</button>
+      {isLoggedIn && <button className="tab" onClick={() => changePage('checkOut')}>Check Out</button>}
       {!isLoggedIn && <button className="tab" onClick={() => changePage('signIn')}>Sign In</button>}
       {!isLoggedIn && <button className="tab" onClick={() => changePage('login')}>Log In</button>}
       {isLoggedIn && <button className="tab" onClick={() => logOut()}>Log Out</button>}

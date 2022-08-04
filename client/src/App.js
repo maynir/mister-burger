@@ -27,6 +27,7 @@ function App() {
       .then(({ data }) => {
         if (data.email) {
           setIsLoggedIn(true);
+          if (data.email === 'admin') setIsAdmin(true);
           setLoggedInEmail(data.email)
         } else {
           setIsLoggedIn(false);
@@ -47,7 +48,8 @@ function App() {
       <StoreHeader headerRef={headerRef} />
       {selectedPage === 'login' && <Login setSelectedPage={setSelectedPage}
         setIsLoggedIn={setIsLoggedIn}
-        setLoggedInEmail={setLoggedInEmail} />}
+        setLoggedInEmail={setLoggedInEmail}
+        setIsAdmin={setIsAdmin} />}
       {selectedPage === 'store' && <Store />}
       {selectedPage === 'signIn' && <SignIn setSelectedPage={setSelectedPage} />}
       <p>{!data ? "Loading..." : data}</p>
