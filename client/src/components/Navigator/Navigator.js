@@ -3,7 +3,7 @@ import React, { useRef, useEffect } from 'react';
 import classNames from 'classnames';
 const axios = require('axios');
 
-const Navigator = ({ headerRef, isLoggedIn, setSelectedPage, isAdmin, setIsLoggedIn, setLoggedInEmail }) => {
+const Navigator = ({ headerRef, isLoggedIn, setSelectedPage, isAdmin, setIsLoggedIn, setLoggedInEmail, numItemsInCart }) => {
   const jumpTo = (ref) => {
     ref.current.scrollIntoView({ behavior: 'smooth' });
   };
@@ -32,7 +32,7 @@ const Navigator = ({ headerRef, isLoggedIn, setSelectedPage, isAdmin, setIsLogge
       {isLoggedIn && <button className="tab" onClick={() => changePage('contactUs')}>Contact Us</button>}
       <button className="tab" onClick={() => changePage('readme')}>Readme</button>
       {isAdmin && <button className="tab" onClick={() => changePage('admin')}>Admin</button>}
-      {isLoggedIn && <button className="tab" onClick={() => changePage('cart')}>Check Out</button>}
+      {isLoggedIn && <button className="tab" onClick={() => changePage('cart')}>Check Out ({numItemsInCart})</button>}
       {!isLoggedIn && <button className="tab" onClick={() => changePage('signIn')}>Sign In</button>}
       {!isLoggedIn && <button className="tab" onClick={() => changePage('login')}>Log In</button>}
       {isLoggedIn && <button className="tab" onClick={() => logOut()}>Log Out</button>}

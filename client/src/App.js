@@ -15,7 +15,7 @@ function App() {
   const [selectedPage, setSelectedPage] = useState('store');
   const [loggedInEmail, setLoggedInEmail] = useState(null);
   const [cartItems, setCartItems] = useState([]);
-  
+
   const headerRef = useRef();
 
   useEffect(() => {
@@ -46,6 +46,10 @@ function App() {
     }
   }, [isLoggedIn, loggedInEmail]);
 
+  const addItemToCart = (name, description, img) => {
+    setCartItems([...cartItems, { name, description, img }]);
+  }
+
   return (
     <div className="App">
       <Navigator
@@ -54,15 +58,16 @@ function App() {
         headerRef={headerRef}
         isAdmin={isAdmin}
         setIsLoggedIn={setIsLoggedIn}
-        setLoggedInEmail={setLoggedInEmail} />
+        setLoggedInEmail={setLoggedInEmail}
+        numItemsInCart={cartItems.length} />
       <StoreHeader headerRef={headerRef} />
       {selectedPage === 'login' && <Login setSelectedPage={setSelectedPage}
         setIsLoggedIn={setIsLoggedIn}
         setLoggedInEmail={setLoggedInEmail}
         setIsAdmin={setIsAdmin} />}
-      {selectedPage === 'store' && <Store setCartItems={setCartItems}/>}
+      {selectedPage === 'store' && <Store addItemToCart={addItemToCart} />}
       {selectedPage === 'signIn' && <SignIn setSelectedPage={setSelectedPage} />}
-      {selectedPage === 'cart' && <Cart />}
+      {selectedPage === 'cart' && <Cart cartItems={cartItems} />}
       <p>{!data ? "Loading..." : data}</p>
     </div>
   );

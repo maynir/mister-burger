@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import axios from 'axios';
 import Item from '../Item/Item'
 
-function Store({ setCartItems }) {
+function Store({ addItemToCart }) {
 
   const [products, setProducts] = useState({});
 
@@ -30,7 +30,7 @@ function Store({ setCartItems }) {
         <Item productName={product}
           productDesc={productInfo.description}
           productImg={productInfo.img} />
-        <button>Add to Cart</button>
+        <button onClick={() => addItemToCart(product, productInfo.description, productInfo.img)}>Add to Cart</button>
       </div>
     });
   }
