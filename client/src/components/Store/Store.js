@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import axios from 'axios';
 import Item from '../Item/Item'
 
-function Store() {
+function Store({ setCartItems }) {
 
   const [products, setProducts] = useState({});
 
@@ -26,10 +26,13 @@ function Store() {
 
   const itemList = (type) => {
     return Object.entries(products[type] || {}).map(([product, productInfo]) => {
-      return <Item key={product}
-        productName={product}
-        productDesc={productInfo.description}
-        productImg={productInfo.img} />
+      return <div className='item-section'>
+        <Item key={product}
+          productName={product}
+          productDesc={productInfo.description}
+          productImg={productInfo.img} />
+        <button>Add to Cart</button>
+      </div>
     });
   }
 

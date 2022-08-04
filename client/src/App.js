@@ -5,6 +5,7 @@ import Login from './components/Login/Login';
 import Store from './components/Store/Store';
 import StoreHeader from './components/StoreHeader/StoreHeader';
 import SignIn from './components/SignIn/SignIn';
+import Cart from './components/Cart/Cart'
 import axios from 'axios';
 
 function App() {
@@ -13,7 +14,8 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [selectedPage, setSelectedPage] = useState('store');
   const [loggedInEmail, setLoggedInEmail] = useState(null);
-
+  const [cartItems, setCartItems] = useState([]);
+  
   const headerRef = useRef();
 
   useEffect(() => {
@@ -39,7 +41,7 @@ function App() {
 
     try {
       getEmail();
-    } catch (err){
+    } catch (err) {
       alert('Something went wrong...')
     }
   }, [isLoggedIn, loggedInEmail]);
@@ -58,8 +60,9 @@ function App() {
         setIsLoggedIn={setIsLoggedIn}
         setLoggedInEmail={setLoggedInEmail}
         setIsAdmin={setIsAdmin} />}
-      {selectedPage === 'store' && <Store />}
+      {selectedPage === 'store' && <Store setCartItems={setCartItems}/>}
       {selectedPage === 'signIn' && <SignIn setSelectedPage={setSelectedPage} />}
+      {selectedPage === 'cart' && <Cart />}
       <p>{!data ? "Loading..." : data}</p>
     </div>
   );

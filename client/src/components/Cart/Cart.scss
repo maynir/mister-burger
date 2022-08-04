@@ -1,0 +1,32 @@
+.Cart {
+  // position: fixed;
+  // top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  .menu-section {
+    .menu-section-title {
+      font-weight: bold;
+      font-size: 23px;
+      margin-bottom: 10px;
+      background-color: #4a5553;
+      color: white;
+    }
+  }
+
+  button {
+    border: none;
+    transition: all 0.3s;
+    font-weight: bold;
+    background-color: #1f2c28;
+    color: white;
+
+    &:hover {
+      background-color: black;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+  }
+}
