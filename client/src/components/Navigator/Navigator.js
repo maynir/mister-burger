@@ -17,6 +17,7 @@ const Navigator = ({ headerRef, isLoggedIn, setSelectedPage, isAdmin, setIsLogge
       await axios.post('/log-out');
       setIsLoggedIn(false);
       setLoggedInEmail(null);
+      setSelectedPage('store');
       alert('Logged out successfuly');
     } catch (err) {
       alert('Couldnt log out...')
