@@ -36,7 +36,7 @@ const Navigator = ({ headerRef, isLoggedIn, setSelectedPage, isAdmin, setIsLogge
       {isLoggedIn && <button className={classNames("tab", { selected: selectedPage === 'cart' })} onClick={() => changePage('cart')}>Cart ({numItemsInCart})</button>}
       {!isLoggedIn && <button className={classNames("tab", { selected: selectedPage === 'signIn' })} onClick={() => changePage('signIn')}>Sign In</button>}
       {!isLoggedIn && <button className={classNames("tab", { selected: selectedPage === 'login' })} onClick={() => changePage('login')}>Log In</button>}
-      {isLoggedIn && <button className={classNames("tab", { selected: selectedPage === '' })} onClick={() => logOut()}>Log Out</button>}
+      {isLoggedIn && <button className='tab' onClick={() => logOut()}>Log Out</button>}
       <button className="up" onClick={() => jumpTo(headerRef)}>UP</button>
     </div>
   );
