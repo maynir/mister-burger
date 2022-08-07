@@ -1,21 +1,9 @@
 import './Store.scss';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import classNames from 'classnames';
-import axios from 'axios';
 import Item from '../Item/Item'
 
-function Store() {
-
-  const [products, setProducts] = useState({});
-
-  useEffect(() => {
-    const getProducts = async () => {
-      const res = await axios.get('/products');
-      setProducts(res.data.products);
-    }
-
-    getProducts();
-  }, [])
+function Store({ products, addItemToCart }) {
 
   const menuSection = (type) => {
     return <div className='menu-section'>
@@ -26,10 +14,12 @@ function Store() {
 
   const itemList = (type) => {
     return Object.entries(products[type] || {}).map(([product, productInfo]) => {
-      return <Item key={product}
-        productName={product}
-        productDesc={productInfo.description}
-        productImg={productInfo.img} />
+      return <div key={product} className='item-section'>
+        <Item productName={product}
+          productDesc={productInfo.description}
+          productImg={productInfo.img} />
+        <button onClick={() => addItemToCart(product, productInfo.description, productInfo.img)}>Add to Cart</button>
+      </div>
     });
   }
 

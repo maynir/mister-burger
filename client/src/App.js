@@ -5,22 +5,27 @@ import Login from './components/Login/Login';
 import Store from './components/Store/Store';
 import StoreHeader from './components/StoreHeader/StoreHeader';
 import SignIn from './components/SignIn/SignIn';
+import Cart from './components/Cart/Cart'
 import axios from 'axios';
 
 function App() {
-  const [data, setData] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [selectedPage, setSelectedPage] = useState('store');
   const [loggedInEmail, setLoggedInEmail] = useState(null);
+  const [cartItems, setCartItems] = useState([]);
+  const [products, setProducts] = useState({});
 
   const headerRef = useRef();
 
   useEffect(() => {
-    fetch("/api")
-      .then((res) => res.json())
-      .then((data) => setData(data.message));
-  }, []);
+    const getProducts = async () => {
+      const res = await axios.get('/products');
+      setProducts(res.data.products);
+    }
+
+    getProducts();
+  }, [])
 
   useEffect(() => {
     const getEmail = async () => {
@@ -33,16 +38,57 @@ function App() {
         setLoggedInEmail(resEmail)
       } else {
         setIsLoggedIn(false);
-        setLoggedInEmail(null)
+        setLoggedInEmail(null);
       }
     }
 
     try {
       getEmail();
-    } catch (err){
+    } catch (err) {
       alert('Something went wrong...')
     }
-  }, [isLoggedIn, loggedInEmail]);
+  }, []);
+
+  useEffect(() => {
+    const getUserCart = async () => {
+      if (Object.keys(products).length === 0) return;
+      const res = await axios.get("/cart");
+      const cart = res.data.cart;
+
+      if (!cart) return;
+      let items = [];
+      Object.values(products).forEach(typedProducts => {
+        Object.keys(typedProducts).forEach(item => {
+          if (cart[item]) items = [...items, { name: item, description: typedProducts[item].description, img: typedProducts[item].img }]
+        })
+      })
+      setCartItems(items);
+    }
+
+    try {
+      getUserCart();
+    } catch (err) {
+      alert('Something went wrong...')
+    }
+  }, [isLoggedIn, products]);
+
+  const addItemToCart = (name, description, img, update = true) => {
+    if (!isLoggedIn) {
+      setSelectedPage('login');
+      alert('Please login to be able to add items to your cart.')
+      return;
+    }
+    setCartItems([...cartItems, { name, description, img }]);
+    if (update) axios.put('/add-to-cart', { name });
+  }
+
+  const removeItemFromCart = (name) => {
+    let newCartItems = [...cartItems];
+    const indexOfItemToRemove = newCartItems.findIndex(item => item.name === name);
+    newCartItems.splice(indexOfItemToRemove, 1);
+    setCartItems(newCartItems);
+    axios.put('/remove-from-cart', { name });
+  }
 
   return (
     <div className="App">
@@ -52,15 +98,17 @@ function App() {
         headerRef={headerRef}
         isAdmin={isAdmin}
         setIsLoggedIn={setIsLoggedIn}
-        setLoggedInEmail={setLoggedInEmail} />
+        setLoggedInEmail={setLoggedInEmail}
+        numItemsInCart={cartItems.length}
+        selectedPage={selectedPage} />
       <StoreHeader headerRef={headerRef} />
       {selectedPage === 'login' && <Login setSelectedPage={setSelectedPage}
         setIsLoggedIn={setIsLoggedIn}
         setLoggedInEmail={setLoggedInEmail}
         setIsAdmin={setIsAdmin} />}
-      {selectedPage === 'store' && <Store />}
+      {selectedPage === 'store' && <Store products={products} addItemToCart={addItemToCart} />}
       {selectedPage === 'signIn' && <SignIn setSelectedPage={setSelectedPage} />}
-      <p>{!data ? "Loading..." : data}</p>
+      {selectedPage === 'cart' && <Cart cartItems={cartItems} removeItemFromCart={removeItemFromCart} />}
     </div>
   );
 }
