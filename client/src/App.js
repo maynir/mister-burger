@@ -9,7 +9,6 @@ import Cart from './components/Cart/Cart'
 import axios from 'axios';
 
 function App() {
-  const [data, setData] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [selectedPage, setSelectedPage] = useState('store');
@@ -29,12 +28,6 @@ function App() {
   }, [])
 
   useEffect(() => {
-    fetch("/api")
-      .then((res) => res.json())
-      .then((data) => setData(data.message));
-  }, []);
-
-  useEffect(() => {
     const getEmail = async () => {
       const res = await axios.get("/username");
       const resEmail = res.data.email;
@@ -45,7 +38,8 @@ function App() {
         setLoggedInEmail(resEmail)
       } else {
         setIsLoggedIn(false);
-        setLoggedInEmail(null)
+        setLoggedInEmail(null);
+        setSelectedPage('store');
       }
     }
 
@@ -102,7 +96,6 @@ function App() {
       {selectedPage === 'store' && <Store products={products} addItemToCart={addItemToCart} />}
       {selectedPage === 'signIn' && <SignIn setSelectedPage={setSelectedPage} />}
       {selectedPage === 'cart' && <Cart cartItems={cartItems} />}
-      <p>{!data ? "Loading..." : data}</p>
     </div>
   );
 }
