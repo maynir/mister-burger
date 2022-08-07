@@ -15,6 +15,7 @@ function App() {
   const [loggedInEmail, setLoggedInEmail] = useState(null);
   const [cartItems, setCartItems] = useState([]);
   const [products, setProducts] = useState({});
+  const [filteredProducts, setFilteredProducts] = useState({});
 
   const headerRef = useRef();
 
@@ -22,6 +23,7 @@ function App() {
     const getProducts = async () => {
       const res = await axios.get('/products');
       setProducts(res.data.products);
+      setFilteredProducts(res.data.products);
     }
 
     getProducts();
@@ -102,11 +104,16 @@ function App() {
         numItemsInCart={cartItems.length}
         selectedPage={selectedPage} />
       <StoreHeader headerRef={headerRef} />
-      {selectedPage === 'login' && <Login setSelectedPage={setSelectedPage}
-        setIsLoggedIn={setIsLoggedIn}
-        setLoggedInEmail={setLoggedInEmail}
-        setIsAdmin={setIsAdmin} />}
-      {selectedPage === 'store' && <Store products={products} addItemToCart={addItemToCart} />}
+      {selectedPage === 'login' &&
+        <Login setSelectedPage={setSelectedPage}
+          setIsLoggedIn={setIsLoggedIn}
+          setLoggedInEmail={setLoggedInEmail}
+          setIsAdmin={setIsAdmin} />}
+      {selectedPage === 'store' &&
+        <Store products={products}
+          addItemToCart={addItemToCart}
+          filteredProducts={filteredProducts}
+          setFilteredProducts={setFilteredProducts} />}
       {selectedPage === 'signIn' && <SignIn setSelectedPage={setSelectedPage} />}
       {selectedPage === 'cart' && <Cart cartItems={cartItems} removeItemFromCart={removeItemFromCart} />}
     </div>

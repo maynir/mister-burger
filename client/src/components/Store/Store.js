@@ -2,8 +2,9 @@ import './Store.scss';
 import React from 'react';
 import classNames from 'classnames';
 import Item from '../Item/Item'
+import Search from '../Search/Search';
 
-function Store({ products, addItemToCart }) {
+function Store({ products, addItemToCart, filteredProducts, setFilteredProducts }) {
 
   const menuSection = (type) => {
     return <div className='menu-section'>
@@ -13,7 +14,7 @@ function Store({ products, addItemToCart }) {
   }
 
   const itemList = (type) => {
-    return Object.entries(products[type] || {}).map(([product, productInfo]) => {
+    return Object.entries(filteredProducts[type] || {}).map(([product, productInfo]) => {
       return <div key={product} className='item-section'>
         <Item productName={product}
           productDesc={productInfo.description}
@@ -25,9 +26,11 @@ function Store({ products, addItemToCart }) {
 
   return (
     <div className={classNames('Store')}>
-      {menuSection('main')}
-      {menuSection('side')}
-      {menuSection('drink')}
+      <Search originalList={products}
+        setFilteredList={setFilteredProducts} />
+      {filteredProducts && menuSection('main')}
+      {filteredProducts && menuSection('side')}
+      {filteredProducts && menuSection('drink')}
     </div>
   );
 }
