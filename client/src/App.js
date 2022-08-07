@@ -39,7 +39,6 @@ function App() {
       } else {
         setIsLoggedIn(false);
         setLoggedInEmail(null);
-        setSelectedPage('store');
       }
     }
 
@@ -74,6 +73,11 @@ function App() {
   }, [isLoggedIn, products]);
 
   const addItemToCart = (name, description, img, update = true) => {
+    if (!isLoggedIn) {
+      setSelectedPage('login');
+      alert('Please login to be able to add items to your cart.')
+      return;
+    }
     setCartItems([...cartItems, { name, description, img }]);
     if (update) axios.put('/add-to-cart', { name });
   }
