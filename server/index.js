@@ -14,11 +14,6 @@ app.use(express.json());
 app.use('/', express.static(__dirname + '/'));
 app.use(cookieParser());
 
-app.get("/api", (req, res) => {
-  console.log('api');
-  res.json({ message: "Hello from server!" });
-});
-
 app.get('/username', (req, res, next) => {
   console.log(sessions[(req.cookies)?.shortPass]);
   res.json({ email: sessions[(req.cookies)?.shortPass] || "" });
@@ -114,6 +109,33 @@ app.put('/add-to-cart', (req, res) => {
   res.end();
 })
 
+app.put('/remove-from-cart', (req, res) => {
+  console.log('/remove-from-cart');
+  const shortPass = (req.cookies)?.shortPass;
+  const email = sessions[shortPass];
+
+  if (email) {
+    const productName = req.body.name;
+    const rawCartsData = fs.readFileSync(CART_FILE);
+    const cartData = JSON.parse(rawCartsData);
+    const currentUserCart = cartData[email] || {};
+    delete currentUserCart[productName];
+
+    fs.writeFile(CART_FILE, JSON.stringify({ [email]: currentUserCart }), 'utf8', function (err) {
+      if (err) {
+        console.log("An error occured while writing Cart JSON Object to File.");
+        return console.log(err);
+      }
+      console.log(`${ productName } removed from cart`)
+    });
+  } else {
+    res.statusCode = 401;
+    console.log("user wasnt logged in")
+  }
+
+  res.end();
+})
+
 app.get('/cart', (req, res) => {
   const shortPass = (req.cookies)?.shortPass;
   const email = sessions[shortPass];
@@ -128,7 +150,6 @@ app.get('/cart', (req, res) => {
 })
 
 app.use('/', (req, res, next) => {
-  console.log('test');
   next();
 })
 

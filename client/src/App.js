@@ -82,6 +82,14 @@ function App() {
     if (update) axios.put('/add-to-cart', { name });
   }
 
+  const removeItemFromCart = (name) => {
+    let newCartItems = [...cartItems];
+    const indexOfItemToRemove = newCartItems.findIndex(item => item.name === name);
+    newCartItems.splice(indexOfItemToRemove, 1);
+    setCartItems(newCartItems);
+    axios.put('/remove-from-cart', { name });
+  }
+
   return (
     <div className="App">
       <Navigator
@@ -100,7 +108,7 @@ function App() {
         setIsAdmin={setIsAdmin} />}
       {selectedPage === 'store' && <Store products={products} addItemToCart={addItemToCart} />}
       {selectedPage === 'signIn' && <SignIn setSelectedPage={setSelectedPage} />}
-      {selectedPage === 'cart' && <Cart cartItems={cartItems} />}
+      {selectedPage === 'cart' && <Cart cartItems={cartItems} removeItemFromCart={removeItemFromCart} />}
     </div>
   );
 }

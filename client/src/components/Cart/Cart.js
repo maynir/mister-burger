@@ -1,17 +1,18 @@
 import './Cart.scss';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import classNames from 'classnames';
-import axios from 'axios';
 import Item from '../Item/Item'
 
-function Cart({ cartItems }) {
+function Cart({ cartItems, removeItemFromCart }) {
 
   const itemList = () => {
     return cartItems.map(product => {
-      return <Item key={product.name}
-        productName={product.name}
-        productDesc={product.description}
-        productImg={product.img} />
+      return <div key={product.name} className='item-section'>
+        <Item productName={product.name}
+          productDesc={product.description}
+          productImg={product.img} />
+        <button onClick={() => removeItemFromCart(product.name)}>Remove From Cart</button>
+      </div>
     });
   }
 
