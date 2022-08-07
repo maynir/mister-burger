@@ -15,8 +15,18 @@ function App() {
   const [selectedPage, setSelectedPage] = useState('store');
   const [loggedInEmail, setLoggedInEmail] = useState(null);
   const [cartItems, setCartItems] = useState([]);
+  const [products, setProducts] = useState({});
 
   const headerRef = useRef();
+
+  useEffect(() => {
+    const getProducts = async () => {
+      const res = await axios.get('/products');
+      setProducts(res.data.products);
+    }
+
+    getProducts();
+  }, [])
 
   useEffect(() => {
     fetch("/api")
@@ -44,10 +54,34 @@ function App() {
     } catch (err) {
       alert('Something went wrong...')
     }
-  }, [isLoggedIn, loggedInEmail]);
+  }, []);
 
-  const addItemToCart = (name, description, img) => {
+  useEffect(() => {
+    const getUserCart = async () => {
+      if (Object.keys(products).length === 0) return;
+      const res = await axios.get("/cart");
+      const cart = res.data.cart;
+
+      if (!cart) return;
+      let items = [];
+      Object.values(products).forEach(typedProducts => {
+        Object.keys(typedProducts).forEach(item => {
+          if (cart[item]) items = [...items, { name: item, description: typedProducts[item].description, img: typedProducts[item].img }]
+        })
+      })
+      setCartItems(items);
+    }
+
+    try {
+      getUserCart();
+    } catch (err) {
+      alert('Something went wrong...')
+    }
+  }, [isLoggedIn, products]);
+
+  const addItemToCart = (name, description, img, update = true) => {
     setCartItems([...cartItems, { name, description, img }]);
+    if (update) axios.put('/add-to-cart', { name });
   }
 
   return (
@@ -65,7 +99,7 @@ function App() {
         setIsLoggedIn={setIsLoggedIn}
         setLoggedInEmail={setLoggedInEmail}
         setIsAdmin={setIsAdmin} />}
-      {selectedPage === 'store' && <Store addItemToCart={addItemToCart} />}
+      {selectedPage === 'store' && <Store products={products} addItemToCart={addItemToCart} />}
       {selectedPage === 'signIn' && <SignIn setSelectedPage={setSelectedPage} />}
       {selectedPage === 'cart' && <Cart cartItems={cartItems} />}
       <p>{!data ? "Loading..." : data}</p>

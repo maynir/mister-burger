@@ -1,21 +1,9 @@
 import './Store.scss';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import classNames from 'classnames';
-import axios from 'axios';
 import Item from '../Item/Item'
 
-function Store({ addItemToCart }) {
-
-  const [products, setProducts] = useState({});
-
-  useEffect(() => {
-    const getProducts = async () => {
-      const res = await axios.get('/products');
-      setProducts(res.data.products);
-    }
-
-    getProducts();
-  }, [])
+function Store({ products, addItemToCart }) {
 
   const menuSection = (type) => {
     return <div className='menu-section'>
