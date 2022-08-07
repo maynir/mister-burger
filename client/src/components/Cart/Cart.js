@@ -6,16 +6,6 @@ import Item from '../Item/Item'
 
 function Cart({ cartItems }) {
 
-
-  // useEffect(() => {
-  //   const getProducts = async () => {
-  //     const res = await axios.get('/products');
-  //     setProducts(res.data.products);
-  //   }
-
-  //   getProducts();
-  // }, [])
-
   const itemList = () => {
     return cartItems.map(product => {
       return <Item key={product.name}
@@ -27,11 +17,8 @@ function Cart({ cartItems }) {
 
   return (
     <div className={classNames('Cart')}>
-      Cart:
+      <div className='cart-title'>Cart</div>
       {itemList()}
-      {/* {menuSection('main')}
-      {menuSection('side')}
-      {menuSection('drink')} */}
     </div>
   );
 }
