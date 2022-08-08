@@ -5,6 +5,10 @@
   align-items: center;
   flex-direction: column;
 
+  .info-text {
+    color: #585858;
+  }
+
   .cart-title {
     font-weight: bold;
     font-size: 23px;
@@ -20,11 +24,10 @@
       background-color: transparent;
       font-weight: bold;
       transition: all 0.3s;
+      border-radius: 10px;
 
       &:hover {
-        color: white;
-        background-color: #4a5553;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        color: red;
         cursor: pointer;
       }
     }
@@ -34,5 +37,23 @@
     font-weight: bold;
     font-size: 23px;
     text-shadow: 1px 1px #bab9b9;
+    display: flex;
+    align-items: center;
+
+    button {
+      border: none;
+      background-color: transparent;
+      font-weight: bold;
+      transition: all 0.3s;
+      margin-left: 5px;
+      font-size: 23px;
+
+      &:hover {
+        color: white;
+        background-color: #4a5553;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        cursor: pointer;
+      }
+    }
   }
 }

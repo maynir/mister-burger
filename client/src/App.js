@@ -99,10 +99,19 @@ function App() {
 
   const calcTotalPrice = () => {
     let total = 0;
-    cartItems.forEach(({ price }) => {
-      total += price;
+    cartItems.forEach(({ price, isSelected }) => {
+      if (isSelected) total += price;
     })
     return total;
+  }
+
+  const toggleItemFromCheckout = (name) => {
+    let newCartItems = [...cartItems];
+    const indexOfItemToUpdate = newCartItems.findIndex(product => product.name === name);
+    let item = newCartItems[indexOfItemToUpdate];
+    item.isSelected = !item.isSelected;
+    newCartItems[indexOfItemToUpdate] = item;
+    setCartItems(newCartItems);
   }
 
   return (
@@ -130,7 +139,8 @@ function App() {
       {selectedPage === 'signIn' && <SignIn setSelectedPage={setSelectedPage} />}
       {selectedPage === 'cart' && <Cart cartItems={cartItems}
         removeItemFromCart={removeItemFromCart}
-        calcTotalPrice={calcTotalPrice} />}
+        calcTotalPrice={calcTotalPrice}
+        toggleItemFromCheckout={toggleItemFromCheckout} />}
     </div>
   );
 }
