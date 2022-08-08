@@ -5,24 +5,28 @@
   order: 0;
   flex-grow: 3;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: left;
   background-size: cover;
   width: 100%;
   background-color: #f5f1f0;
   flex-direction: column;
   justify-content: center;
+  color: white;
   
   .main-txt{
     font-size: 65px;
     font-weight: 700;
     font-style: oblique;
-    color: black;
+    // color: #0300ff;
+    // text-shadow: 2px 2px #f5f1f0;
+    text-shadow: 2px 2px #484848;
   }
 
   .sub-txt{
     margin-top: 19px;
     font-style: oblique;
-    color: black;
+    // color: #0300ff;
     font-weight: bold;
+    text-shadow: 1px 1px #484848;
   }
 }
