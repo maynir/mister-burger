@@ -61,7 +61,12 @@ function App() {
       let items = [];
       Object.values(products).forEach(typedProducts => {
         Object.keys(typedProducts).forEach(item => {
-          if (cart[item]) items = [...items, { name: item, description: typedProducts[item].description, img: typedProducts[item].img }]
+          if (cart[item]) items = [...items, {
+            name: item,
+            description: typedProducts[item].description,
+            img: typedProducts[item].img,
+            price: typedProducts[item].price
+          }]
         })
       })
       setCartItems(items);
@@ -74,13 +79,13 @@ function App() {
     }
   }, [isLoggedIn, products]);
 
-  const addItemToCart = (name, description, img, update = true) => {
+  const addItemToCart = (name, description, img, price, update = true) => {
     if (!isLoggedIn) {
       setSelectedPage('login');
       alert('Please login to be able to add items to your cart.')
       return;
     }
-    setCartItems([...cartItems, { name, description, img }]);
+    setCartItems([...cartItems, { name, description, img, price }]);
     if (update) axios.put('/add-to-cart', { name });
   }
 
@@ -90,6 +95,14 @@ function App() {
     newCartItems.splice(indexOfItemToRemove, 1);
     setCartItems(newCartItems);
     axios.put('/remove-from-cart', { name });
+  }
+
+  const calcTotalPrice = () => {
+    let total = 0;
+    cartItems.forEach(({ price }) => {
+      total += price;
+    })
+    return total;
   }
 
   return (
@@ -115,7 +128,9 @@ function App() {
           filteredProducts={filteredProducts}
           setFilteredProducts={setFilteredProducts} />}
       {selectedPage === 'signIn' && <SignIn setSelectedPage={setSelectedPage} />}
-      {selectedPage === 'cart' && <Cart cartItems={cartItems} removeItemFromCart={removeItemFromCart} />}
+      {selectedPage === 'cart' && <Cart cartItems={cartItems}
+        removeItemFromCart={removeItemFromCart}
+        calcTotalPrice={calcTotalPrice} />}
     </div>
   );
 }

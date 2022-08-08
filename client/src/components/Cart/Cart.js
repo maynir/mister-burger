@@ -3,14 +3,15 @@ import React from 'react';
 import classNames from 'classnames';
 import Item from '../Item/Item'
 
-function Cart({ cartItems, removeItemFromCart }) {
+function Cart({ cartItems, removeItemFromCart, calcTotalPrice }) {
 
   const itemList = () => {
     return cartItems.map(product => {
       return <div key={product.name} className='item-section'>
         <Item productName={product.name}
           productDesc={product.description}
-          productImg={product.img} />
+          productImg={product.img}
+          productPrice={product.price} />
         <button onClick={() => removeItemFromCart(product.name)}>Remove From Cart</button>
       </div>
     });
@@ -20,6 +21,10 @@ function Cart({ cartItems, removeItemFromCart }) {
     <div className={classNames('Cart')}>
       <div className='cart-title'>Cart</div>
       {itemList()}
+      <div className='price-section'>
+        <span className='label'>Total price: </span>
+        <span className='price'>{calcTotalPrice()}$</span>
+      </div>
     </div>
   );
 }

@@ -18,8 +18,9 @@ function Store({ products, addItemToCart, filteredProducts, setFilteredProducts 
       return <div key={product} className='item-section'>
         <Item productName={product}
           productDesc={productInfo.description}
-          productImg={productInfo.img} />
-        <button onClick={() => addItemToCart(product, productInfo.description, productInfo.img)}>Add to Cart</button>
+          productImg={productInfo.img}
+          productPrice={productInfo.price} />
+        <button onClick={() => addItemToCart(product, productInfo.description, productInfo.img, productInfo.price)}>Add to Cart</button>
       </div>
     });
   }

@@ -2,23 +2,27 @@
   "main": {
     "hamburger": {
       "description": "200 gm meat with onion, tomato, lettuce.",
-      "img": "hamburger.png"
+      "img": "hamburger.png",
+      "price": 57
     },
     "cheeseburger": {
       "description": "200 gm meat with cheese, onion, tomato, lettuce.",
-      "img": "cheeseburger.png"
+      "img": "cheeseburger.png",
+      "price": 60
     }
   },
   "side": {
     "fries": {
       "description": "Potato fries.",
-      "img": "fries.png"
+      "img": "fries.png",
+      "price": 15
     }
   },
   "drink": {
     "coke": {
       "description": "Coke side drink.",
-      "img": "coke.png"
+      "img": "coke.png",
+      "price": 8
     }
   }
 }
