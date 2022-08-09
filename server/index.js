@@ -8,6 +8,7 @@ const sessions = {};
 const USERS_FILE = './server/users.json';
 const PRODUCTS_FILE = './server/products.json';
 const CART_FILE = './server/cart.json';
+const PURCHASES_FILE = './server/purchases.json';
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -146,6 +147,25 @@ app.get('/cart', (req, res) => {
     res.json({ cart: cartData[email] })
   } else {
     res.json({ cart: null })
+  }
+})
+
+app.post('/purchase', (req, res) => {
+  const shortPass = (req.cookies)?.shortPass;
+  const email = sessions[shortPass];
+
+  if (email) {
+    const newPurchase = req.body.purchase;
+    const purchaseId = new Date().valueOf();
+    fs.writeFile(PURCHASES_FILE, JSON.stringify({ [purchaseId]: newPurchase }), 'utf8', function (err) {
+      if (err) {
+        console.log("An error occured while writing Purchase JSON Object to File.");
+        return console.log(err);
+      }
+      console.log(`${ productName } added to cart`)
+    });
+  } else {
+    res.end();
   }
 })
 

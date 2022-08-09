@@ -3,7 +3,7 @@ import React from 'react';
 import classNames from 'classnames';
 import SelectableItem from '../SelectableItem/SelectableItem';
 
-function Cart({ cartItems, removeItemFromCart, calcTotalPrice, toggleItemFromCheckout }) {
+function Cart({ cartItems, removeItemFromCart, calcTotalPrice, toggleItemFromCheckout, setSelectedPage }) {
 
   const itemList = () => {
     return cartItems.map(product => {
@@ -18,11 +18,11 @@ function Cart({ cartItems, removeItemFromCart, calcTotalPrice, toggleItemFromChe
       </div>
     });
   }
+
   const showPrice = () => {
     return <div className='price-section'>
-      <span className='label'>Total price: </span>
+      <span className='label'>Total price:</span>
       <span className='price'>{calcTotalPrice()}$</span>
-      <button>Checkout</button>
     </div>
   }
 
@@ -37,6 +37,7 @@ function Cart({ cartItems, removeItemFromCart, calcTotalPrice, toggleItemFromChe
       <div className='cart-title'>Cart</div>
       {calcTotalPrice() === 0 ? showSelectItemsMsg() : showPrice()}
       {itemList()}
+      {calcTotalPrice() !== 0 && <button className='checkout' onClick={() => setSelectedPage('checkout')}>Checkout</button>}
     </div>
   );
 }

@@ -5,7 +5,8 @@ import Login from './components/Login/Login';
 import Store from './components/Store/Store';
 import StoreHeader from './components/StoreHeader/StoreHeader';
 import SignIn from './components/SignIn/SignIn';
-import Cart from './components/Cart/Cart'
+import Cart from './components/Cart/Cart';
+import Checkout from './components/Checkout/Checkout';
 import axios from 'axios';
 
 function App() {
@@ -114,6 +115,10 @@ function App() {
     setCartItems(newCartItems);
   }
 
+  const selectedItems = () => {
+    return cartItems.filter(({ isSelected }) => isSelected);
+  }
+
   return (
     <div className="App">
       <Navigator
@@ -140,7 +145,11 @@ function App() {
       {selectedPage === 'cart' && <Cart cartItems={cartItems}
         removeItemFromCart={removeItemFromCart}
         calcTotalPrice={calcTotalPrice}
-        toggleItemFromCheckout={toggleItemFromCheckout} />}
+        toggleItemFromCheckout={toggleItemFromCheckout}
+        setSelectedPage={setSelectedPage} />}
+      {selectedPage === 'checkout' && <Checkout products={selectedItems()}
+        setSelectedPage={setSelectedPage}
+        calcTotalPrice={calcTotalPrice} />}
     </div>
   );
 }
