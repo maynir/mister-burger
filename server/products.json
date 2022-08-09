@@ -13,7 +13,7 @@
     "chickenburger": {
       "description": "200 gm chicken with onion, tomato, lettuce.",
       "img": "chickenburger.png",
-      "price": 60
+      "price": 55
     }
   },
   "side": {
@@ -25,7 +25,7 @@
     "onion rings": {
       "description": "Deep fried onion rings.",
       "img": "onionrings.png",
-      "price": 15
+      "price": 17
     }
   },
   "drink": {
