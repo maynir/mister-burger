@@ -34,7 +34,6 @@ function Cart({ cartItems, removeItemFromCart, calcTotalPrice, toggleItemFromChe
 
   return (
     <div className={classNames('Cart')}>
-      <div className='cart-title'>Cart</div>
       {calcTotalPrice() === 0 ? showSelectItemsMsg() : showPrice()}
       {itemList()}
       {calcTotalPrice() !== 0 && <button className='checkout' onClick={() => setSelectedPage('checkout')}>Checkout</button>}
