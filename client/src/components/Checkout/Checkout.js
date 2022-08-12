@@ -19,16 +19,16 @@ function Checkout({ products, setSelectedPage, calcTotalPrice, loggedInEmail, se
 
   const clearCart = async () => {
     setCartItems([]);
-    const res = await axios.delete('/cart');
+    await axios.delete('/cart');
   }
 
   const pay = async () => {
     const purchase = { items: products, email: loggedInEmail, price: calcTotalPrice() };
     try {
-      const resPurchase = await axios.post('/purchase', { purchase });
+      await axios.post('/purchase', { purchase });
       await clearCart();
-      alert("Thank you for ordering!");
       setSelectedPage('store');
+      alert("Thank you for ordering!");
     } catch (error) {
       console.log(error.message);
       alert('Something went wrong...')
