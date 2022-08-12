@@ -1,0 +1,42 @@
+.OurLifestyle {
+  background-color: #2c322e;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .gallery {
+    display: flex;
+    flex-wrap: wrap;
+    width: 1190px;
+    height: 500px;
+    overflow-y: scroll;
+    align-content: flex-start;
+
+    img {
+      display: block;
+      max-width: 300px;
+      max-height: 197px;
+      width: auto;
+      height: auto;
+      flex-grow: 1;
+    }
+  }
+
+  .main-text {
+    color: white;
+    font-size: 30px;
+    margin-top: 30px;
+
+    .big {
+      font-size: 50px;
+      font-family: Parata;
+    }
+  }
+
+  .sub-text {
+    color: white;
+    font-size: 20px;
+    margin-bottom: 30px;
+  }
+}
