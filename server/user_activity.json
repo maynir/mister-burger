@@ -1,0 +1,76 @@
+{
+  "activity": [
+    {
+      "email": "admin",
+      "path": "/login",
+      "time": "Fri Aug 12 2022"
+    },
+    {
+      "email": "admin",
+      "path": "/add-to-cart",
+      "time": "Fri Aug 12 2022",
+      "itme": "hamburger"
+    },
+    {
+      "email": "admin",
+      "path": "/remove-from-cart",
+      "time": "Fri Aug 12 2022"
+    },
+    {
+      "email": "admin",
+      "path": "/login",
+      "time": "Fri Aug 12 2022"
+    },
+    {
+      "email": "admin",
+      "path": "/add-to-cart",
+      "time": "Fri Aug 12 2022",
+      "itme": "fries"
+    },
+    {
+      "email": "admin",
+      "path": "/login",
+      "time": "Fri Aug 12 2022"
+    },
+    {
+      "email": "admin",
+      "path": "/purchase",
+      "time": "Fri Aug 12 2022",
+      "price": 72
+    },
+    {
+      "email": "admin",
+      "path": "/login",
+      "time": "Fri Aug 12 2022"
+    },
+    {
+      "email": "admin",
+      "path": "/add-to-cart",
+      "time": "Fri Aug 12 2022",
+      "itme": "hamburger"
+    },
+    {
+      "email": "admin",
+      "path": "/add-to-cart",
+      "time": "Fri Aug 12 2022",
+      "itme": "onion rings"
+    },
+    {
+      "email": "admin",
+      "path": "/add-to-cart",
+      "time": "Fri Aug 12 2022",
+      "itme": "coke"
+    },
+    {
+      "email": "admin",
+      "path": "/purchase",
+      "time": "Fri Aug 12 2022",
+      "price": 82,
+      "items": [
+        "hamburger",
+        "onion rings",
+        "coke"
+      ]
+    }
+  ]
+}
