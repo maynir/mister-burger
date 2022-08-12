@@ -30,7 +30,7 @@ const Navigator = ({ headerRef, isLoggedIn, setSelectedPage, isAdmin, setIsLogge
       {isLoggedIn && <button className={classNames("tab", { selected: selectedPage === 'gallery' })} onClick={() => changePage('gallery')}>Gallery</button>}
       {isLoggedIn && <button className={classNames("tab", { selected: selectedPage === 'calories' })} onClick={() => changePage('calories')}>Calories</button>}
       {isLoggedIn && <button className={classNames("tab", { selected: selectedPage === 'lottery' })} onClick={() => changePage('lottery')}>Lottery</button>}
-      {isLoggedIn && <button className={classNames("tab", { selected: selectedPage === 'contactUs' })} onClick={() => changePage('contactUs')}>Contact Us</button>}
+      {isLoggedIn && <button className={classNames("tab", { selected: selectedPage === 'contactus' })} onClick={() => changePage('contactus')}>Contact Us</button>}
       <button className={classNames("tab", { selected: selectedPage === 'readme' })} onClick={() => changePage('readme')}>Readme</button>
       {isAdmin && <button className={classNames("tab", { selected: selectedPage === 'admin' })} onClick={() => changePage('admin')}>Admin</button>}
       {isLoggedIn && <button className={classNames("tab", { selected: selectedPage === 'cart' })} onClick={() => changePage('cart')}>Cart ({numItemsInCart})</button>}

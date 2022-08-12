@@ -1,0 +1,135 @@
+.ContactUs {
+  background-color: #121818;
+  // background-color: #2c322e;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 250px;
+  flex-direction: column;
+
+  h1 {
+    font-weight: 600;
+    font-size: 72px;
+    color: white;
+    text-align: center;
+    margin: 0;
+  }
+
+  h4 {
+    font-weight: 400;
+    font-size: 20px;
+    color: white;
+    line-height: 1.5;
+  }
+
+  h5 {
+    font-weight: 400;
+    font-size: 18px;
+    color: grey;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  form {
+    width: 700px;
+
+    .error {
+      color: red;
+    }
+
+    input,
+    textarea {
+      float: left;
+      width: 293px;
+      margin: 1rem 0;
+      position: relative;
+      border-radius: 4px;
+    }
+
+    input,
+    textarea {
+      padding: 15px;
+      border: 0;
+      width: 100%;
+      font-size: 1rem;
+      background-color: #2d2d2d;
+      color: white;
+      border-radius: 4px;
+
+      &:focus {
+        outline: 0;
+
+        &::placeholder {
+          color: #cbc1c1;
+          transition: all 0.3s;
+        }
+      }
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 15em;
+      font-family: "Lato";
+    }
+
+    button {
+      width: 200px;
+      height: 45px;
+      border: none;
+      transition: all 0.3s;
+      font-weight: bold;
+      background-color: #1f2c28;
+      color: #9b9b9b;
+      font-size: 20px;
+      border-radius: 4px;
+      margin-top: 15px;
+
+      &:enabled:hover {
+        color: white;
+        background-color: black;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      }
+
+      &:disabled {
+        opacity: 0.7;
+        background-color: #121818;
+        border: 3.5px #1f2c28 solid;
+      }
+
+      i {
+        margin-right: 7px;
+      }
+    }
+  }
+
+  .alert {
+    padding: 20px;
+    background-color: #164c67;
+    color: white;
+    margin-bottom: 15px;
+    font-size: 20px;
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+    border-radius: 4px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+    .closebtn {
+      margin-left: 15px;
+      color: white;
+      font-weight: bold;
+      float: right;
+      font-size: 22px;
+      line-height: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+
+      &:hover {
+        color: black;
+      }
+    }
+  }
+}

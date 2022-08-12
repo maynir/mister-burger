@@ -7,6 +7,7 @@ import StoreHeader from './components/StoreHeader/StoreHeader';
 import SignIn from './components/SignIn/SignIn';
 import Cart from './components/Cart/Cart';
 import Checkout from './components/Checkout/Checkout';
+import ContactUs from './components/ContactUs/ContactUs'
 import axios from 'axios';
 
 function App() {
@@ -156,6 +157,7 @@ function App() {
         calcTotalPrice={calcTotalPrice}
         loggedInEmail={loggedInEmail}
         setCartItems={setCartItems} />}
+        {selectedPage === 'contactus' && <ContactUs/>}
     </div>
   );
 }
