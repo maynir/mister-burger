@@ -149,7 +149,9 @@ function App() {
         setSelectedPage={setSelectedPage} />}
       {selectedPage === 'checkout' && <Checkout products={selectedItems()}
         setSelectedPage={setSelectedPage}
-        calcTotalPrice={calcTotalPrice} />}
+        calcTotalPrice={calcTotalPrice}
+        loggedInEmail={loggedInEmail}
+        setCartItems={setCartItems} />}
     </div>
   );
 }

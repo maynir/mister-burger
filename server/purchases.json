@@ -1,0 +1,15 @@
+{
+  "1660297837087": {
+    "items": [
+      {
+        "name": "hamburger",
+        "description": "200 gm meat with onion, tomato, lettuce.",
+        "img": "hamburger.png",
+        "price": 57,
+        "isSelected": true
+      }
+    ],
+    "email": "admin",
+    "price": 57
+  }
+}

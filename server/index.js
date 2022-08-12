@@ -157,16 +157,35 @@ app.post('/purchase', (req, res) => {
   if (email) {
     const newPurchase = req.body.purchase;
     const purchaseId = new Date().valueOf();
+    console.log(JSON.stringify({ [purchaseId]: newPurchase }));
     fs.writeFile(PURCHASES_FILE, JSON.stringify({ [purchaseId]: newPurchase }), 'utf8', function (err) {
       if (err) {
         console.log("An error occured while writing Purchase JSON Object to File.");
         return console.log(err);
       }
-      console.log(`${ productName } added to cart`)
+      console.log('new purchase', JSON.stringify({ [purchaseId]: newPurchase }));
     });
   } else {
-    res.end();
+    console.log("Not authorized");
   }
+  res.end();
+})
+
+app.delete('/cart', (req, res) => {
+  const shortPass = (req.cookies)?.shortPass;
+  const email = sessions[shortPass];
+
+  if (email) {
+    fs.writeFile(CART_FILE, JSON.stringify({ [email]: {} }), 'utf8', function (err) {
+      if (err) {
+        console.log("An error occured while writing Purchase JSON Object to File.");
+        return console.log(err);
+      }
+    });
+  } else {
+    console.log("Not authorized");
+  }
+  res.end();
 })
 
 app.use('/', (req, res, next) => {
