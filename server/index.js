@@ -99,22 +99,21 @@ app.use('/', (req, res, next) => {
 
 app.put('/add-to-cart', (req, res) => {
   const email = res.locals.email;
-  console.log(res.locals);
 
   const productName = req.body.name;
   const rawCartsData = fs.readFileSync(CART_FILE);
   const cartData = JSON.parse(rawCartsData);
-  const currentUserCart = cartData[email] || {};
-  const newUserCart = { ...currentUserCart, [productName]: true }
+  const userCart = cartData[email] || {};
+  userCart[productName] = true;
+  cartData[email] = userCart;
 
-  fs.writeFile(CART_FILE, JSON.stringify({ [email]: newUserCart }), 'utf8', function (err) {
+  fs.writeFile(CART_FILE, JSON.stringify(cartData), 'utf8', function (err) {
     if (err) {
       console.log("An error occured while writing Cart JSON Object to File.");
       return console.log(err);
     }
     console.log(`${ productName } added to cart`)
   });
-
 
   res.end();
 })
@@ -125,10 +124,11 @@ app.put('/remove-from-cart', (req, res) => {
   const productName = req.body.name;
   const rawCartsData = fs.readFileSync(CART_FILE);
   const cartData = JSON.parse(rawCartsData);
-  const currentUserCart = cartData[email] || {};
-  delete currentUserCart[productName];
+  const userCart = cartData[email] || {};
+  delete userCart[productName];
+  cartData[email] = userCart;
 
-  fs.writeFile(CART_FILE, JSON.stringify({ [email]: currentUserCart }), 'utf8', function (err) {
+  fs.writeFile(CART_FILE, JSON.stringify(cartData), 'utf8', function (err) {
     if (err) {
       console.log("An error occured while writing Cart JSON Object to File.");
       return console.log(err);
@@ -149,8 +149,11 @@ app.get('/cart', (req, res) => {
 
 app.delete('/cart', (req, res) => {
   const email = res.locals.email;
+  const rawCartData = fs.readFileSync(CART_FILE);
+  const cartData = JSON.parse(rawCartData);
+  cartData[email] = {};
 
-  fs.writeFile(CART_FILE, JSON.stringify({ [email]: {} }), 'utf8', function (err) {
+  fs.writeFile(CART_FILE, JSON.stringify(cartData), 'utf8', function (err) {
     if (err) {
       console.log("An error occured while writing Purchase JSON Object to File.");
       return console.log(err);
@@ -163,7 +166,11 @@ app.delete('/cart', (req, res) => {
 app.post('/purchase', (req, res) => {
   const newPurchase = req.body.purchase;
   const purchaseId = new Date().valueOf();
-  fs.writeFile(PURCHASES_FILE, JSON.stringify({ [purchaseId]: newPurchase }), 'utf8', function (err) {
+  const rawPurchases = fs.readFileSync(PURCHASES_FILE);
+  const purchasesData = JSON.parse(rawPurchases);
+  purchasesData[purchaseId] = newPurchase;
+
+  fs.writeFile(PURCHASES_FILE, JSON.stringify(purchasesData), 'utf8', function (err) {
     if (err) {
       console.log("An error occured while writing Purchase JSON Object to File.");
       return console.log(err);

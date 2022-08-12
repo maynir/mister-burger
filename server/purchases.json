@@ -11,5 +11,25 @@
     ],
     "email": "admin",
     "price": 57
+  },
+  "1660302561655": {
+    "items": [
+      {
+        "name": "hamburger",
+        "description": "200 gm meat with onion, tomato, lettuce.",
+        "img": "hamburger.png",
+        "price": 57,
+        "isSelected": true
+      },
+      {
+        "name": "cheeseburger",
+        "description": "200 gm meat with cheese, onion, tomato, lettuce.",
+        "img": "cheeseburger.png",
+        "price": 60,
+        "isSelected": true
+      }
+    ],
+    "email": "admin",
+    "price": 117
   }
 }
