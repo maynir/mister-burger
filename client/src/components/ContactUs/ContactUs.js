@@ -2,7 +2,7 @@ import './ContactUs.scss';
 import { useState, useEffect } from 'react';
 import { send } from '@emailjs/browser'
 
-const ContactUs = ({ contactMeRef }) => {
+const ContactUs = () => {
   const initialToSend = {
     first_name: '',
     last_name: '',
@@ -76,7 +76,7 @@ const ContactUs = ({ contactMeRef }) => {
   }, [validation, toSend]);
 
   return (
-    <div className="ContactUs" id="ContactUs" ref={contactMeRef}>
+    <div className="ContactUs" id="ContactUs">
       {showAlert && <div className="alert"  >
         <span className="closebtn" onClick={() => setShowAlert(false)}>&times;</span>
         An email just sent to us! Thank you for filling the form.
