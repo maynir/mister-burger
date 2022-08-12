@@ -8,6 +8,7 @@ import SignIn from './components/SignIn/SignIn';
 import Cart from './components/Cart/Cart';
 import Checkout from './components/Checkout/Checkout';
 import ContactUs from './components/ContactUs/ContactUs'
+import OurLifestyle from './components/OurLifestyle/OurLifestyle';
 import axios from 'axios';
 
 function App() {
@@ -157,7 +158,8 @@ function App() {
         calcTotalPrice={calcTotalPrice}
         loggedInEmail={loggedInEmail}
         setCartItems={setCartItems} />}
-        {selectedPage === 'contactus' && <ContactUs/>}
+      {selectedPage === 'contactus' && <ContactUs />}
+      {selectedPage === 'ourlifestyle' && <OurLifestyle />}
     </div>
   );
 }
