@@ -55,6 +55,7 @@ function App() {
   useEffect(() => {
     const getUserCart = async () => {
       if (Object.keys(products).length === 0) return;
+      if (!loggedInEmail) return;
       const res = await axios.get("/cart");
       const cart = res.data.cart;
 
