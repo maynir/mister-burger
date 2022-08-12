@@ -5,7 +5,8 @@ import Login from './components/Login/Login';
 import Store from './components/Store/Store';
 import StoreHeader from './components/StoreHeader/StoreHeader';
 import SignIn from './components/SignIn/SignIn';
-import Cart from './components/Cart/Cart'
+import Cart from './components/Cart/Cart';
+import Checkout from './components/Checkout/Checkout';
 import axios from 'axios';
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
   useEffect(() => {
     const getUserCart = async () => {
       if (Object.keys(products).length === 0) return;
+      if (!isLoggedIn) return;
       const res = await axios.get("/cart");
       const cart = res.data.cart;
 
@@ -85,8 +87,11 @@ function App() {
       alert('Please login to be able to add items to your cart.')
       return;
     }
+    const indexOfItemToRemove = cartItems.findIndex(item => item.name === name);
+    if (indexOfItemToRemove > -1) return alert("Item in cart already");
     setCartItems([...cartItems, { name, description, img, price }]);
     if (update) axios.put('/add-to-cart', { name });
+    alert("Item successfully added to cart");
   }
 
   const removeItemFromCart = (name) => {
@@ -99,10 +104,23 @@ function App() {
 
   const calcTotalPrice = () => {
     let total = 0;
-    cartItems.forEach(({ price }) => {
-      total += price;
+    cartItems.forEach(({ price, isSelected }) => {
+      if (isSelected) total += price;
     })
     return total;
+  }
+
+  const toggleItemFromCheckout = (name) => {
+    let newCartItems = [...cartItems];
+    const indexOfItemToUpdate = newCartItems.findIndex(product => product.name === name);
+    let item = newCartItems[indexOfItemToUpdate];
+    item.isSelected = !item.isSelected;
+    newCartItems[indexOfItemToUpdate] = item;
+    setCartItems(newCartItems);
+  }
+
+  const selectedItems = () => {
+    return cartItems.filter(({ isSelected }) => isSelected);
   }
 
   return (
@@ -130,7 +148,14 @@ function App() {
       {selectedPage === 'signIn' && <SignIn setSelectedPage={setSelectedPage} />}
       {selectedPage === 'cart' && <Cart cartItems={cartItems}
         removeItemFromCart={removeItemFromCart}
-        calcTotalPrice={calcTotalPrice} />}
+        calcTotalPrice={calcTotalPrice}
+        toggleItemFromCheckout={toggleItemFromCheckout}
+        setSelectedPage={setSelectedPage} />}
+      {selectedPage === 'checkout' && <Checkout products={selectedItems()}
+        setSelectedPage={setSelectedPage}
+        calcTotalPrice={calcTotalPrice}
+        loggedInEmail={loggedInEmail}
+        setCartItems={setCartItems} />}
     </div>
   );
 }

@@ -8,16 +8,20 @@ const sessions = {};
 const USERS_FILE = './server/users.json';
 const PRODUCTS_FILE = './server/products.json';
 const CART_FILE = './server/cart.json';
+const PURCHASES_FILE = './server/purchases.json';
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/', express.static(__dirname + '/'));
 app.use(cookieParser());
 
-app.get('/username', (req, res, next) => {
-  console.log(sessions[(req.cookies)?.shortPass]);
+app.listen(port, () => {
+  console.log(`Listening on port: ${ port }`);
+})
+
+app.get('/username', (req, res) => {
+  console.log('username', sessions[(req.cookies)?.shortPass]);
   res.json({ email: sessions[(req.cookies)?.shortPass] || "" });
-  next();
 })
 
 app.post("/sign-in", (req, res) => {
@@ -72,85 +76,109 @@ app.post("/log-out", (req, res) => {
   res.end();
 });
 
-app.listen(port, () => {
-  console.log(`Listening on port: ${ port }`);
-})
-
 app.get('/products', (req, res) => {
   const rawProductsData = fs.readFileSync(PRODUCTS_FILE);
   const products = JSON.parse(rawProductsData);
   res.json({ products });
 })
 
-app.put('/add-to-cart', (req, res) => {
-  console.log('/add-to-cart');
+app.use('/', (req, res, next) => {
   const shortPass = (req.cookies)?.shortPass;
   const email = sessions[shortPass];
+  console.log(req.url);
 
   if (email) {
-    const productName = req.body.name;
-    const rawCartsData = fs.readFileSync(CART_FILE);
-    const cartData = JSON.parse(rawCartsData);
-    const currentUserCart = cartData[email] || {};
-    const newUserCart = { ...currentUserCart, [productName]: true }
-
-    fs.writeFile(CART_FILE, JSON.stringify({ [email]: newUserCart }), 'utf8', function (err) {
-      if (err) {
-        console.log("An error occured while writing Cart JSON Object to File.");
-        return console.log(err);
-      }
-      console.log(`${ productName } added to cart`)
-    });
+    console.log(`logged in email: ${ email }`);
+    res.locals.email = email;
+    next();
   } else {
     res.statusCode = 401;
-    console.log("user wasnt logged in")
+    console.log("Not authorized to do this action.")
   }
+})
+
+app.put('/add-to-cart', (req, res) => {
+  const email = res.locals.email;
+
+  const productName = req.body.name;
+  const rawCartsData = fs.readFileSync(CART_FILE);
+  const cartData = JSON.parse(rawCartsData);
+  const userCart = cartData[email] || {};
+  userCart[productName] = true;
+  cartData[email] = userCart;
+
+  fs.writeFile(CART_FILE, JSON.stringify(cartData), 'utf8', function (err) {
+    if (err) {
+      console.log("An error occured while writing Cart JSON Object to File.");
+      return console.log(err);
+    }
+    console.log(`${ productName } added to cart`)
+  });
 
   res.end();
 })
 
 app.put('/remove-from-cart', (req, res) => {
-  console.log('/remove-from-cart');
-  const shortPass = (req.cookies)?.shortPass;
-  const email = sessions[shortPass];
+  const email = res.locals.email;
 
-  if (email) {
-    const productName = req.body.name;
-    const rawCartsData = fs.readFileSync(CART_FILE);
-    const cartData = JSON.parse(rawCartsData);
-    const currentUserCart = cartData[email] || {};
-    delete currentUserCart[productName];
+  const productName = req.body.name;
+  const rawCartsData = fs.readFileSync(CART_FILE);
+  const cartData = JSON.parse(rawCartsData);
+  const userCart = cartData[email] || {};
+  delete userCart[productName];
+  cartData[email] = userCart;
 
-    fs.writeFile(CART_FILE, JSON.stringify({ [email]: currentUserCart }), 'utf8', function (err) {
-      if (err) {
-        console.log("An error occured while writing Cart JSON Object to File.");
-        return console.log(err);
-      }
-      console.log(`${ productName } removed from cart`)
-    });
-  } else {
-    res.statusCode = 401;
-    console.log("user wasnt logged in")
-  }
+  fs.writeFile(CART_FILE, JSON.stringify(cartData), 'utf8', function (err) {
+    if (err) {
+      console.log("An error occured while writing Cart JSON Object to File.");
+      return console.log(err);
+    }
+    console.log(`${ productName } removed from cart`)
+  });
 
   res.end();
 })
 
 app.get('/cart', (req, res) => {
-  const shortPass = (req.cookies)?.shortPass;
-  const email = sessions[shortPass];
+  const email = res.locals.email;
 
-  if (email) {
-    const rawCartData = fs.readFileSync(CART_FILE);
-    const cartData = JSON.parse(rawCartData);
-    res.json({ cart: cartData[email] })
-  } else {
-    res.json({ cart: null })
-  }
+  const rawCartData = fs.readFileSync(CART_FILE);
+  const cartData = JSON.parse(rawCartData);
+  res.json({ cart: cartData[email] })
 })
 
-app.use('/', (req, res, next) => {
-  next();
+app.delete('/cart', (req, res) => {
+  const email = res.locals.email;
+  const rawCartData = fs.readFileSync(CART_FILE);
+  const cartData = JSON.parse(rawCartData);
+  cartData[email] = {};
+
+  fs.writeFile(CART_FILE, JSON.stringify(cartData), 'utf8', function (err) {
+    if (err) {
+      console.log("An error occured while writing Purchase JSON Object to File.");
+      return console.log(err);
+    }
+  });
+
+  res.end();
+})
+
+app.post('/purchase', (req, res) => {
+  const newPurchase = req.body.purchase;
+  const purchaseId = new Date().valueOf();
+  const rawPurchases = fs.readFileSync(PURCHASES_FILE);
+  const purchasesData = JSON.parse(rawPurchases);
+  purchasesData[purchaseId] = newPurchase;
+
+  fs.writeFile(PURCHASES_FILE, JSON.stringify(purchasesData), 'utf8', function (err) {
+    if (err) {
+      console.log("An error occured while writing Purchase JSON Object to File.");
+      return console.log(err);
+    }
+    console.log('new purchase', JSON.stringify({ [purchaseId]: newPurchase }));
+  });
+
+  res.end();
 })
 
 function setCookieAndSession(email, password, rememberMe, res) {

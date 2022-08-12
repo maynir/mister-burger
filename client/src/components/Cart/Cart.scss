@@ -5,10 +5,9 @@
   align-items: center;
   flex-direction: column;
 
-  .cart-title {
-    font-weight: bold;
-    font-size: 23px;
-    margin-bottom: 10px;
+  .info-text {
+    margin-top: 10px;
+    color: #585858;
   }
 
   .item-section {
@@ -20,19 +19,46 @@
       background-color: transparent;
       font-weight: bold;
       transition: all 0.3s;
+      border-radius: 10px;
 
       &:hover {
-        color: white;
-        background-color: #4a5553;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        color: red;
         cursor: pointer;
       }
     }
   }
 
-  .price-section {
+  button.checkout {
+    border: none;
+    background-color: transparent;
     font-weight: bold;
-    font-size: 23px;
-    text-shadow: 1px 1px #bab9b9;
+    transition: all 0.3s;
+    margin-left: 5px;
+    font-size: 18px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    width: 200px;
+    height: 35px;
+
+    &:hover {
+      cursor: pointer;
+      color: #c154c1;
+    }
+  }
+}
+
+.price-section {
+  font-weight: bold;
+  font-size: 23px;
+  text-shadow: 1px 1px #bab9b9;
+  display: flex;
+  align-items: center;
+
+  .label {
+    margin-right: 3px;
+  }
+
+  .price {
+    color: #c154c1;
   }
 }

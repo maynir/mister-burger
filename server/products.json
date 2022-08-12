@@ -9,6 +9,11 @@
       "description": "200 gm meat with cheese, onion, tomato, lettuce.",
       "img": "cheeseburger.png",
       "price": 60
+    },
+    "chickenburger": {
+      "description": "200 gm chicken with onion, tomato, lettuce.",
+      "img": "chickenburger.png",
+      "price": 55
     }
   },
   "side": {
@@ -16,12 +21,22 @@
       "description": "Potato fries.",
       "img": "fries.png",
       "price": 15
+    },
+    "onion rings": {
+      "description": "Deep fried onion rings.",
+      "img": "onionrings.png",
+      "price": 17
     }
   },
   "drink": {
     "coke": {
       "description": "Coke side drink.",
       "img": "coke.png",
+      "price": 8
+    },
+    "sprite": {
+      "description": "Sprite side drink.",
+      "img": "sprite.png",
       "price": 8
     }
   }
