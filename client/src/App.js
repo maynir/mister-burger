@@ -55,7 +55,7 @@ function App() {
   useEffect(() => {
     const getUserCart = async () => {
       if (Object.keys(products).length === 0) return;
-      if (!loggedInEmail) return;
+      if (!isLoggedIn) return;
       const res = await axios.get("/cart");
       const cart = res.data.cart;
 
@@ -87,8 +87,11 @@ function App() {
       alert('Please login to be able to add items to your cart.')
       return;
     }
+    const indexOfItemToRemove = cartItems.findIndex(item => item.name === name);
+    if (indexOfItemToRemove > -1) return alert("Item in cart already");
     setCartItems([...cartItems, { name, description, img, price }]);
     if (update) axios.put('/add-to-cart', { name });
+    alert("Item successfully added to cart");
   }
 
   const removeItemFromCart = (name) => {
