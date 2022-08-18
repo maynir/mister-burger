@@ -1,5 +1,5 @@
 {
-  "activity": [
+  "activities": [
     {
       "email": "admin",
       "path": "/login",
@@ -71,6 +71,16 @@
         "onion rings",
         "coke"
       ]
+    },
+    {
+      "email": "admin",
+      "path": "/login",
+      "time": "Thu Aug 18 2022"
+    },
+    {
+      "email": "admin",
+      "path": "/login",
+      "time": "Thu Aug 18 2022"
     }
   ]
 }

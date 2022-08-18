@@ -9,6 +9,7 @@ import Cart from './components/Cart/Cart';
 import Checkout from './components/Checkout/Checkout';
 import ContactUs from './components/ContactUs/ContactUs'
 import OurLifestyle from './components/OurLifestyle/OurLifestyle';
+import Admin from './components/Admin/Admin';
 import axios from 'axios';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
   const [selectedPage, setSelectedPage] = useState('store');
   const [loggedInEmail, setLoggedInEmail] = useState(null);
   const [cartItems, setCartItems] = useState([]);
+  const [activities, setActivities] = useState([]);
   const [products, setProducts] = useState({});
   const [filteredProducts, setFilteredProducts] = useState({});
 
@@ -82,6 +84,20 @@ function App() {
       alert('Something went wrong...')
     }
   }, [isLoggedIn, products]);
+
+  useEffect(() => {
+    const getUserActivity = async () => {
+      if (!isAdmin) return
+      const res = await axios.get("/users-activities");
+      setActivities(res.data.activities);
+    }
+
+    try {
+      getUserActivity();
+    } catch (err) {
+      alert('Something went wrong...')
+    }
+  }, [isAdmin]);
 
   const addItemToCart = (name, description, img, price, update = true) => {
     if (!isLoggedIn) {
@@ -160,6 +176,7 @@ function App() {
         setCartItems={setCartItems} />}
       {selectedPage === 'contactus' && <ContactUs />}
       {selectedPage === 'ourlifestyle' && <OurLifestyle />}
+      {isAdmin && selectedPage === 'admin' && <Admin isAdmin={isAdmin} activities={activities} />}
     </div>
   );
 }

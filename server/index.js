@@ -90,7 +90,7 @@ app.use('/', (req, res, next) => {
   const email = sessions[shortPass];
   console.log(req.url);
 
-  if (email) {
+  if ((req.url === '/users-activities' && email && email === 'admin') || (req.url !== 'users-activities' && email)) {
     console.log(`logged in email: ${ email }`);
     res.locals.email = email;
     next();
@@ -190,6 +190,12 @@ app.post('/purchase', (req, res) => {
   res.end();
 })
 
+app.get('/users-activities', (req, res) => {
+  const rawUsersActivity = fs.readFileSync(USER_ACTIVITY_FILE);
+  const activities = JSON.parse(rawUsersActivity);
+  res.json({ activities });
+})
+
 function setCookieAndSession(email, password, rememberMe, res) {
   const experationTime = rememberMe ? 1000 * 60 * 60 * 24 * 10 : 1000 * 60 * 30;
   const shortPass = generateShortPass(password);
@@ -212,16 +218,16 @@ function generateShortPass(password) {
 
 function addUserActivity(email, path, item = null, price = null, items = null) {
   const rawActivity = fs.readFileSync(USER_ACTIVITY_FILE);
-  let { activity } = JSON.parse(rawActivity);
+  let { activities } = JSON.parse(rawActivity);
   let newActivity = { email, path, time: (new Date()).toDateString() }
   if (path === '/add-to-cart') newActivity.itme = item;
-  if (path === '/purchase') { 
-    newActivity.price = price; 
+  if (path === '/purchase') {
+    newActivity.price = price;
     newActivity.items = items;
   }
-  activity = [...activity, newActivity];
+  activities = [...activities, newActivity];
 
-  fs.writeFile(USER_ACTIVITY_FILE, JSON.stringify({ activity }), 'utf8', function (err) {
+  fs.writeFile(USER_ACTIVITY_FILE, JSON.stringify({ activities }), 'utf8', function (err) {
     if (err) {
       console.log("An error occured while writing user activity JSON Object to File.");
       return console.log(err);
