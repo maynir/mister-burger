@@ -1,0 +1,27 @@
+.UserActivityItem {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    text-align: left;
+    padding: 10px;
+  }
+
+  button {
+    border: none;
+    transition: all 0.3s;
+    font-weight: bold;
+    background-color: #1f2c28;
+    color: white;
+
+    &:hover {
+      background-color: black;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+  }
+}

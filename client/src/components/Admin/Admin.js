@@ -1,17 +1,19 @@
 import './Admin.scss';
 import React from 'react';
 import classNames from 'classnames';
-import Item from '../Item/Item'
+import UserActivityItem from '../UserActivityItem/UserActivityItem'
 
 function Admin({ isAdmin, activities }) {
 
   const listActivity = () => {
-    return activities.map(([product, productInfo]) => {
-      return <div key={product} className='item-section'>
-        <Item productName={product}
-          productDesc={productInfo.description}
-          productImg={productInfo.img}
-          productPrice={productInfo.price} />
+    return activities.map(({ email, path, time, item, items, price }, i) => {
+      return <div key={i} className='user-activity-item-section'>
+        <UserActivityItem email={email}
+          path={path}
+          time={time}
+          item={item}
+          items={items}
+          price={price} />
         {/* <button onClick={() => addItemToCart(product, productInfo.description, productInfo.img, productInfo.price)}>Add to Cart</button> */}
       </div>
     });
@@ -19,7 +21,9 @@ function Admin({ isAdmin, activities }) {
 
   return (
     <div className={classNames('Admin')}>
-      {activities && listActivity()}
+      <div className='activities-section'>
+        {activities && listActivity()}
+      </div>
     </div>
   );
 }
