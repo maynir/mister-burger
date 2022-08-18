@@ -1,5 +1,5 @@
 # MisteR Burger Shop
-M(ay)isteR(oee) Burger Shop is May and Roee's final project for application development course at Reichman University.
+M(ay)isteR(oee) Burger Shop is May and Roee's final project for application development course at Reichman University. 🍔
 
 ### Run locally
 ---
