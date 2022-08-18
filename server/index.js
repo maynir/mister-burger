@@ -9,6 +9,7 @@ const USERS_FILE = './server/users.json';
 const PRODUCTS_FILE = './server/products.json';
 const CART_FILE = './server/cart.json';
 const PURCHASES_FILE = './server/purchases.json';
+const USER_ACTIVITY_FILE = './server/user_activity.json';
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -56,6 +57,7 @@ app.post("/login", (req, res) => {
   if (verifyUser(email, password)) {
     setCookieAndSession(email, password, rememberMe, res);
     res.statusCode = 201;
+    addUserActivity(email, req.url);
   } else {
     res.statusCode = 401;
   }
@@ -70,6 +72,7 @@ app.post("/log-out", (req, res) => {
     delete sessions[shortPass];
     res.clearCookie('shortPass');
     console.log("logged out")
+    addUserActivity(email, req.url);
   } else {
     console.log("user wasnt logged in")
   }
@@ -87,7 +90,7 @@ app.use('/', (req, res, next) => {
   const email = sessions[shortPass];
   console.log(req.url);
 
-  if (email) {
+  if ((req.url === '/users-activities' && email && email === 'admin') || (req.url !== 'users-activities' && email)) {
     console.log(`logged in email: ${ email }`);
     res.locals.email = email;
     next();
@@ -115,6 +118,7 @@ app.put('/add-to-cart', (req, res) => {
     console.log(`${ productName } added to cart`)
   });
 
+  addUserActivity(email, req.url, productName);
   res.end();
 })
 
@@ -135,6 +139,8 @@ app.put('/remove-from-cart', (req, res) => {
     }
     console.log(`${ productName } removed from cart`)
   });
+
+  addUserActivity(email, req.url, productName);
 
   res.end();
 })
@@ -164,6 +170,7 @@ app.delete('/cart', (req, res) => {
 })
 
 app.post('/purchase', (req, res) => {
+  const email = res.locals.email;
   const newPurchase = req.body.purchase;
   const purchaseId = new Date().valueOf();
   const rawPurchases = fs.readFileSync(PURCHASES_FILE);
@@ -178,7 +185,15 @@ app.post('/purchase', (req, res) => {
     console.log('new purchase', JSON.stringify({ [purchaseId]: newPurchase }));
   });
 
+  addUserActivity(email, req.url, null, newPurchase.price, newPurchase.items.map(({ name }) => name));
+
   res.end();
+})
+
+app.get('/users-activities', (req, res) => {
+  const rawUsersActivity = fs.readFileSync(USER_ACTIVITY_FILE);
+  const { activities } = JSON.parse(rawUsersActivity);
+  res.json({ activities });
 })
 
 function setCookieAndSession(email, password, rememberMe, res) {
@@ -199,4 +214,23 @@ function verifyUser(email, password) {
 
 function generateShortPass(password) {
   return md5(password);
+}
+
+function addUserActivity(email, path, item = null, price = null, items = null) {
+  const rawActivity = fs.readFileSync(USER_ACTIVITY_FILE);
+  let { activities } = JSON.parse(rawActivity);
+  let newActivity = { email, path, time: (new Date()).toLocaleString() }
+  if (path === '/add-to-cart') newActivity.item = item;
+  if (path === '/purchase') {
+    newActivity.price = price;
+    newActivity.items = items;
+  }
+  activities = [...activities, newActivity];
+
+  fs.writeFile(USER_ACTIVITY_FILE, JSON.stringify({ activities }), 'utf8', function (err) {
+    if (err) {
+      console.log("An error occured while writing user activity JSON Object to File.");
+      return console.log(err);
+    }
+  });
 }

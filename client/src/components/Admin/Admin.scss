@@ -1,0 +1,16 @@
+.Admin {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  .activities-section {
+    .title {
+      font-weight: bold;
+      font-size: 23px;
+      margin: 15px 0;
+      font-family: Parata;
+    }
+  }
+}

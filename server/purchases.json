@@ -1,1 +1,115 @@
-{"1660297837087":{"items":[{"name":"hamburger","description":"200 gm meat with onion, tomato, lettuce.","img":"hamburger.png","price":57,"isSelected":true}],"email":"admin","price":57},"1660302561655":{"items":[{"name":"hamburger","description":"200 gm meat with onion, tomato, lettuce.","img":"hamburger.png","price":57,"isSelected":true},{"name":"cheeseburger","description":"200 gm meat with cheese, onion, tomato, lettuce.","img":"cheeseburger.png","price":60,"isSelected":true}],"email":"admin","price":117},"1660302788891":{"items":[{"name":"cheeseburger","description":"200 gm meat with cheese, onion, tomato, lettuce.","img":"cheeseburger.png","price":60,"isSelected":true}],"email":"admin","price":60}}
+{
+  "1660297837087": {
+    "items": [
+      {
+        "name": "hamburger",
+        "description": "200 gm meat with onion, tomato, lettuce.",
+        "img": "hamburger.png",
+        "price": 57,
+        "isSelected": true
+      }
+    ],
+    "email": "admin",
+    "price": 57
+  },
+  "1660302561655": {
+    "items": [
+      {
+        "name": "hamburger",
+        "description": "200 gm meat with onion, tomato, lettuce.",
+        "img": "hamburger.png",
+        "price": 57,
+        "isSelected": true
+      },
+      {
+        "name": "cheeseburger",
+        "description": "200 gm meat with cheese, onion, tomato, lettuce.",
+        "img": "cheeseburger.png",
+        "price": 60,
+        "isSelected": true
+      }
+    ],
+    "email": "admin",
+    "price": 117
+  },
+  "1660302788891": {
+    "items": [
+      {
+        "name": "cheeseburger",
+        "description": "200 gm meat with cheese, onion, tomato, lettuce.",
+        "img": "cheeseburger.png",
+        "price": 60,
+        "isSelected": true
+      }
+    ],
+    "email": "admin",
+    "price": 60
+  },
+  "1660324624625": {
+    "items": [
+      {
+        "name": "hamburger",
+        "description": "200 gm meat with onion, tomato, lettuce.",
+        "img": "hamburger.png",
+        "price": 57,
+        "isSelected": true
+      },
+      {
+        "name": "fries",
+        "description": "Potato fries.",
+        "img": "fries.png",
+        "price": 15,
+        "isSelected": true
+      }
+    ],
+    "email": "admin",
+    "price": 72
+  },
+  "1660324699365": {
+    "items": [
+      {
+        "name": "hamburger",
+        "description": "200 gm meat with onion, tomato, lettuce.",
+        "img": "hamburger.png",
+        "price": 57,
+        "isSelected": true
+      },
+      {
+        "name": "fries",
+        "description": "Potato fries.",
+        "img": "fries.png",
+        "price": 15,
+        "isSelected": true
+      }
+    ],
+    "email": "admin",
+    "price": 72
+  },
+  "1660324848232": {
+    "items": [
+      {
+        "name": "hamburger",
+        "description": "200 gm meat with onion, tomato, lettuce.",
+        "img": "hamburger.png",
+        "price": 57,
+        "isSelected": true
+      },
+      {
+        "name": "onion rings",
+        "description": "Deep fried onion rings.",
+        "img": "onionrings.png",
+        "price": 17,
+        "isSelected": true
+      },
+      {
+        "name": "coke",
+        "description": "Coke side drink.",
+        "img": "coke.png",
+        "price": 8,
+        "isSelected": true
+      }
+    ],
+    "email": "admin",
+    "price": 82
+  }
+}
