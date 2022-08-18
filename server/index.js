@@ -192,7 +192,7 @@ app.post('/purchase', (req, res) => {
 
 app.get('/users-activities', (req, res) => {
   const rawUsersActivity = fs.readFileSync(USER_ACTIVITY_FILE);
-  const activities = JSON.parse(rawUsersActivity);
+  const { activities } = JSON.parse(rawUsersActivity);
   res.json({ activities });
 })
 
