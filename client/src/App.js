@@ -19,6 +19,7 @@ function App() {
   const [loggedInEmail, setLoggedInEmail] = useState(null);
   const [cartItems, setCartItems] = useState([]);
   const [activities, setActivities] = useState([]);
+  const [filteredActivities, setFilteredActivities] = useState([]);
   const [products, setProducts] = useState({});
   const [filteredProducts, setFilteredProducts] = useState({});
 
@@ -176,7 +177,10 @@ function App() {
         setCartItems={setCartItems} />}
       {selectedPage === 'contactus' && <ContactUs />}
       {selectedPage === 'ourlifestyle' && <OurLifestyle />}
-      {isAdmin && selectedPage === 'admin' && <Admin isAdmin={isAdmin} activities={activities} />}
+      {isAdmin && selectedPage === 'admin' && <Admin isAdmin={isAdmin}
+        activities={activities}
+        filteredActivities={filteredActivities}
+        setFilteredActivities={setFilteredActivities} />}
     </div>
   );
 }

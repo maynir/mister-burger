@@ -1,7 +1,7 @@
 import './Search.scss';
 import { useState, useEffect } from 'react';
 
-function Search({ originalList, setFilteredList }) {
+function Search({ originalList, setFilteredList, filterFunction, searchPlaceholder }) {
 
   const [searchPhrase, setSearchPhrase] = useState('');
 
@@ -11,19 +11,13 @@ function Search({ originalList, setFilteredList }) {
 
   useEffect(() => {
     if (searchPhrase === '') return setFilteredList(originalList);
-    const newFilteredList = JSON.parse(JSON.stringify(originalList));
-    Object.entries(originalList).forEach(([type, productsType]) => {
-      Object.entries(productsType).forEach(([productName, { description }]) => {
-        if (!productName.includes(searchPhrase) && !description.includes(searchPhrase)) delete newFilteredList[type][productName];
-      })
-    });
-    setFilteredList(newFilteredList);
+    setFilteredList(filterFunction(searchPhrase));
   }, [searchPhrase, originalList])
 
   return <div className='Search'>
     <input type='text'
       name='search'
-      placeholder='Search by product name/description'
+      placeholder={searchPlaceholder}
       value={searchPhrase}
       onChange={handleChange}
       autoComplete="off"
