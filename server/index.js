@@ -219,7 +219,7 @@ function generateShortPass(password) {
 function addUserActivity(email, path, item = null, price = null, items = null) {
   const rawActivity = fs.readFileSync(USER_ACTIVITY_FILE);
   let { activities } = JSON.parse(rawActivity);
-  let newActivity = { email, path, time: (new Date()).toDateString() }
+  let newActivity = { email, path, time: (new Date()).toLocaleString() }
   if (path === '/add-to-cart') newActivity.item = item;
   if (path === '/purchase') {
     newActivity.price = price;
