@@ -26,6 +26,7 @@ function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities 
   return (
     <div className={classNames('Admin')}>
       <div className='activities-section'>
+        <div className='title'>USERS ACTIVITY</div>
         <Search originalList={activities}
           setFilteredList={setFilteredActivities}
           filterFunction={searchFunction}

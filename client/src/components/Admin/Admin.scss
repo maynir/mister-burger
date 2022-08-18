@@ -1,36 +1,16 @@
 .Admin {
-  // position: fixed;
-  // top: 0;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 
-  .menu-section {
-    .menu-section-title {
+  .activities-section {
+    .title {
       font-weight: bold;
       font-size: 23px;
       margin: 15px 0;
       font-family: Parata;
-    }
-
-    .item-section {
-      display: flex;
-      margin-bottom: 5px;
-      border-bottom: solid 0.5px lightgray;
-
-      button {
-        border: none;
-        background-color: transparent;
-        font-weight: bold;
-        transition: all 0.3s;
-
-        &:hover {
-          color: #008000;
-          cursor: pointer;
-        }
-      }
     }
   }
 }
