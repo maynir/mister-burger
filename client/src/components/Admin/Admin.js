@@ -3,6 +3,8 @@ import React from 'react';
 import classNames from 'classnames';
 import UserActivityItem from '../UserActivityItem/UserActivityItem'
 import Search from '../Search/Search';
+import AddNewProduct from '../AddNewProduct/AddNewProduct'
+import Item from '../Item/Item';
 
 function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities }) {
 
@@ -23,6 +25,10 @@ function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities 
     return activities.filter(({ email }) => email.startsWith(searchPhrase))
   }
 
+  const listProducts = () => {
+    return [];
+  }
+
   return (
     <div className={classNames('Admin')}>
       <div className='activities-section'>
@@ -32,6 +38,12 @@ function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities 
           filterFunction={searchFunction}
           searchPlaceholder='Search by email prefix' />
         {activities && listActivity()}
+      </div>
+
+      <div className='products-manager-section'>
+        <div className='title'>PRODUCTS MANAGER</div>
+        <AddNewProduct />
+        {listProducts()}
       </div>
     </div>
   );

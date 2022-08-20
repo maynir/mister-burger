@@ -5,12 +5,14 @@
   align-items: center;
   flex-direction: column;
 
+  .title {
+    font-weight: bold;
+    font-size: 23px;
+    margin: 15px 0;
+    font-family: Parata;
+  }
+  
   .activities-section {
-    .title {
-      font-weight: bold;
-      font-size: 23px;
-      margin: 15px 0;
-      font-family: Parata;
-    }
+
   }
 }

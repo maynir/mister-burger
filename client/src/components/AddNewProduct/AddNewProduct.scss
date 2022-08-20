@@ -1,0 +1,68 @@
+.AddNewProduct {
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  form {
+    width: 293px;
+
+    input,
+    textarea {
+      float: left;
+      margin-top: 10px;
+      position: relative;
+      border-radius: 4px;
+    }
+
+    input,
+    textarea {
+      padding: 15px;
+      border: 0;
+      width: 100%;
+      font-size: 1rem;
+      background-color: #f5f1f0;
+      border-radius: 4px;
+
+      &:focus {
+        outline: 0;
+
+        &::placeholder {
+          color: #cbc1c1;
+          transition: all 0.3s;
+        }
+      }
+    }
+
+    textarea {
+      width: 100%;
+      font-family: "Lato";
+      resize: none;
+    }
+
+    button {
+      width: 200px;
+      height: 45px;
+      border: none;
+      transition: all 0.3s;
+      font-weight: bold;
+      background-color: #f5f1f0;
+      font-size: 20px;
+      border-radius: 4px;
+      margin-top: 15px;
+
+      &:enabled:hover {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      }
+
+      &:disabled {
+        opacity: 0.7;
+      }
+
+      i {
+        margin-right: 7px;
+      }
+    }
+  }
+}
