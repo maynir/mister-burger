@@ -1,6 +1,8 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const md5 = require('md5');
+const multer = require('multer');
+const cors = require('cors')
 const app = express();
 const port = 3001;
 const fs = require('fs');
@@ -10,7 +12,18 @@ const PRODUCTS_FILE = './server/products.json';
 const CART_FILE = './server/cart.json';
 const PURCHASES_FILE = './server/purchases.json';
 const USER_ACTIVITY_FILE = './server/user_activity.json';
+const ADMIN_URLS = ['/users-activities', '/add-product'];
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, `${ __dirname }/../client/public/images`)
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  }
+})
+const upload = multer({ storage: storage });
 
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/', express.static(__dirname + '/'));
@@ -90,7 +103,7 @@ app.use('/', (req, res, next) => {
   const email = sessions[shortPass];
   console.log(req.url);
 
-  if ((req.url === '/users-activities' && email && email === 'admin') || (req.url !== 'users-activities' && email)) {
+  if ((ADMIN_URLS.includes(req.url) && email && email === 'admin') || (req.url !== 'users-activities' && email)) {
     console.log(`logged in email: ${ email }`);
     res.locals.email = email;
     next();
@@ -194,6 +207,26 @@ app.get('/users-activities', (req, res) => {
   const rawUsersActivity = fs.readFileSync(USER_ACTIVITY_FILE);
   const { activities } = JSON.parse(rawUsersActivity);
   res.json({ activities });
+})
+
+app.post('/add-product', upload.single('file'), (req, res) => {
+  const img = req.file.originalname
+  const { title, productType, description, price } = req.body;
+
+  const newProductJson = { [title]: { description, img, price } }
+  const rawProducts = fs.readFileSync(PRODUCTS_FILE);
+  const products = JSON.parse(rawProducts);
+  const productsOfType = products[productType] || {};
+  products[productType] = { ...productsOfType, ...newProductJson };
+
+  fs.writeFile(PRODUCTS_FILE, JSON.stringify(products), 'utf8', function (err) {
+    if (err) {
+      console.log("An error occured while writing Purchase JSON Object to File.");
+      return console.log(err);
+    }
+  });
+
+  res.end();
 })
 
 function setCookieAndSession(email, password, rememberMe, res) {
