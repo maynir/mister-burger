@@ -2,14 +2,14 @@ import './AddNewProduct.scss';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function AddNewProduct({getProducts}) {
+function AddNewProduct({ getProducts }) {
 
   const initialProductDetails = {
     title: '',
     productType: 'main',
     description: '',
     file: '',
-    price: 0,
+    price: '',
   };
   const [newProduct, setNewProduct] = useState(initialProductDetails);
   const [sumbitEnabled, setSumbitEnabled] = useState(false);
@@ -38,6 +38,7 @@ function AddNewProduct({getProducts}) {
   }
 
   return <div className='AddNewProduct'>
+    <label>Product Name:</label>
     <input
       type='text'
       name='title'
@@ -46,11 +47,13 @@ function AddNewProduct({getProducts}) {
       onChange={handleChange}
       autoComplete="off"
     />
+    <label>Product Type:</label>
     <select name="productType" id="productType" onChange={handleChange} value={newProduct.productType}>
       <option value="main">Main</option>
       <option value="side">Side</option>
       <option value="drink">Drink</option>
     </select>
+    <label>Description:</label>
     <textarea
       type='text'
       name='description'
@@ -59,16 +62,20 @@ function AddNewProduct({getProducts}) {
       onChange={handleChange}
       autoComplete="off"
     />
+    <label>Product Img:</label>
     <input
       type='file'
       name='file'
       onChange={handleChange}
     />
+    <label>Price:</label>
     <input
       type='number'
       name='price'
       placeholder='Product price'
       value={newProduct.price}
+      min={1}
+      max={100}
       onChange={handleChange}
       autoComplete="off"
     />
