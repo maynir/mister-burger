@@ -6,7 +6,7 @@ import Search from '../Search/Search';
 import AddNewProduct from '../AddNewProduct/AddNewProduct'
 import Item from '../Item/Item';
 
-function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities }) {
+function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities, getProducts }) {
 
   const listActivity = () => {
     return filteredActivities.map(({ email, path, time, item, items, price }, i) => {
@@ -42,7 +42,7 @@ function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities 
 
       <div className='products-manager-section'>
         <div className='title'>PRODUCTS MANAGER</div>
-        <AddNewProduct />
+        <AddNewProduct getProducts={getProducts} />
         {listProducts()}
       </div>
     </div>

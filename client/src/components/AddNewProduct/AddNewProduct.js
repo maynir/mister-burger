@@ -2,7 +2,7 @@ import './AddNewProduct.scss';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function AddNewProduct() {
+function AddNewProduct({getProducts}) {
 
   const initialProductDetails = {
     title: '',
@@ -29,6 +29,7 @@ function AddNewProduct() {
         formData.append(key, value);
       }
       await axios.post('/add-product', formData);
+      await getProducts();
       alert("Added new product");
     } catch (error) {
       console.log(error.message);
