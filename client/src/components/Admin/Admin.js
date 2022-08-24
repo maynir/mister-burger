@@ -37,7 +37,10 @@ function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities,
           setFilteredList={setFilteredActivities}
           filterFunction={searchFunction}
           searchPlaceholder='Search by email prefix' />
-        {activities && listActivity()}
+        <div className='list-section'>
+          {activities && listActivity()}
+        </div>
+        {activities.length > 2 && <span className='scroll-for-more'>Scroll for more...</span>}
       </div>
 
       <div className='products-manager-section'>

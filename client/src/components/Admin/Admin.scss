@@ -11,8 +11,15 @@
     margin: 15px 0;
     font-family: Parata;
   }
-  
-  .activities-section {
 
+  .activities-section {
+    .scroll-for-more {
+      color: lightgray;
+    }
+
+    .list-section {
+      max-height: 200px;
+      overflow-y: scroll;
+    }
   }
 }

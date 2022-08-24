@@ -77,21 +77,6 @@ app.post("/login", (req, res) => {
   res.end();
 });
 
-app.post("/log-out", (req, res) => {
-  console.log(req.cookies)
-  const shortPass = (req.cookies)?.shortPass;
-
-  if (sessions[shortPass]) {
-    delete sessions[shortPass];
-    res.clearCookie('shortPass');
-    console.log("logged out")
-    addUserActivity(email, req.url);
-  } else {
-    console.log("user wasnt logged in")
-  }
-  res.end();
-});
-
 app.get('/products', (req, res) => {
   const rawProductsData = fs.readFileSync(PRODUCTS_FILE);
   const products = JSON.parse(rawProductsData);
@@ -112,6 +97,21 @@ app.use('/', (req, res, next) => {
     console.log("Not authorized to do this action.")
   }
 })
+
+app.post("/log-out", (req, res) => {
+  const email = res.locals.email;
+  const shortPass = (req.cookies)?.shortPass;
+
+  if (sessions[shortPass]) {
+    delete sessions[shortPass];
+    res.clearCookie('shortPass');
+    console.log("logged out")
+    addUserActivity(email, req.url);
+  } else {
+    console.log("user wasnt logged in")
+  }
+  res.end();
+});
 
 app.put('/add-to-cart', (req, res) => {
   const email = res.locals.email;
