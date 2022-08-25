@@ -1,6 +1,8 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const md5 = require('md5');
+const multer = require('multer');
+const cors = require('cors')
 const app = express();
 const port = 3001;
 const fs = require('fs');
@@ -10,7 +12,18 @@ const PRODUCTS_FILE = './server/products.json';
 const CART_FILE = './server/cart.json';
 const PURCHASES_FILE = './server/purchases.json';
 const USER_ACTIVITY_FILE = './server/user_activity.json';
+const ADMIN_URLS = ['/users-activities', '/add-product'];
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, `${ __dirname }/../client/public/images`)
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  }
+})
+const upload = multer({ storage: storage });
 
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/', express.static(__dirname + '/'));
@@ -64,8 +77,29 @@ app.post("/login", (req, res) => {
   res.end();
 });
 
+app.get('/products', (req, res) => {
+  const rawProductsData = fs.readFileSync(PRODUCTS_FILE);
+  const products = JSON.parse(rawProductsData);
+  res.json({ products });
+})
+
+app.use('/', (req, res, next) => {
+  const shortPass = (req.cookies)?.shortPass;
+  const email = sessions[shortPass];
+  console.log(req.url);
+
+  if ((ADMIN_URLS.includes(req.url) && email && email === 'admin') || (req.url !== 'users-activities' && email)) {
+    console.log(`logged in email: ${ email }`);
+    res.locals.email = email;
+    next();
+  } else {
+    res.statusCode = 401;
+    console.log("Not authorized to do this action.")
+  }
+})
+
 app.post("/log-out", (req, res) => {
-  console.log(req.cookies)
+  const email = res.locals.email;
   const shortPass = (req.cookies)?.shortPass;
 
   if (sessions[shortPass]) {
@@ -78,27 +112,6 @@ app.post("/log-out", (req, res) => {
   }
   res.end();
 });
-
-app.get('/products', (req, res) => {
-  const rawProductsData = fs.readFileSync(PRODUCTS_FILE);
-  const products = JSON.parse(rawProductsData);
-  res.json({ products });
-})
-
-app.use('/', (req, res, next) => {
-  const shortPass = (req.cookies)?.shortPass;
-  const email = sessions[shortPass];
-  console.log(req.url);
-
-  if ((req.url === '/users-activities' && email && email === 'admin') || (req.url !== 'users-activities' && email)) {
-    console.log(`logged in email: ${ email }`);
-    res.locals.email = email;
-    next();
-  } else {
-    res.statusCode = 401;
-    console.log("Not authorized to do this action.")
-  }
-})
 
 app.put('/add-to-cart', (req, res) => {
   const email = res.locals.email;
@@ -194,6 +207,26 @@ app.get('/users-activities', (req, res) => {
   const rawUsersActivity = fs.readFileSync(USER_ACTIVITY_FILE);
   const { activities } = JSON.parse(rawUsersActivity);
   res.json({ activities });
+})
+
+app.post('/add-product', upload.single('file'), (req, res) => {
+  const img = req.file.originalname
+  const { title, productType, description, price } = req.body;
+
+  const newProductJson = { [title]: { description, img, price } }
+  const rawProducts = fs.readFileSync(PRODUCTS_FILE);
+  const products = JSON.parse(rawProducts);
+  const productsOfType = products[productType] || {};
+  products[productType] = { ...productsOfType, ...newProductJson };
+
+  fs.writeFile(PRODUCTS_FILE, JSON.stringify(products), 'utf8', function (err) {
+    if (err) {
+      console.log("An error occured while writing Purchase JSON Object to File.");
+      return console.log(err);
+    }
+  });
+
+  res.end();
 })
 
 function setCookieAndSession(email, password, rememberMe, res) {

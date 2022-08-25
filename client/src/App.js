@@ -25,13 +25,13 @@ function App() {
 
   const headerRef = useRef();
 
-  useEffect(() => {
-    const getProducts = async () => {
-      const res = await axios.get('/products');
-      setProducts(res.data.products);
-      setFilteredProducts(res.data.products);
-    }
+  const getProducts = async () => {
+    const res = await axios.get('/products');
+    setProducts(res.data.products);
+    setFilteredProducts(res.data.products);
+  }
 
+  useEffect(() => {
     getProducts();
   }, [])
 
@@ -180,7 +180,8 @@ function App() {
       {isAdmin && selectedPage === 'admin' && <Admin isAdmin={isAdmin}
         activities={activities}
         filteredActivities={filteredActivities}
-        setFilteredActivities={setFilteredActivities} />}
+        setFilteredActivities={setFilteredActivities}
+        getProducts={getProducts} />}
     </div>
   );
 }

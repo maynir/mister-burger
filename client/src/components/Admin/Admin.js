@@ -3,8 +3,10 @@ import React from 'react';
 import classNames from 'classnames';
 import UserActivityItem from '../UserActivityItem/UserActivityItem'
 import Search from '../Search/Search';
+import AddNewProduct from '../AddNewProduct/AddNewProduct'
+import Item from '../Item/Item';
 
-function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities }) {
+function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities, getProducts }) {
 
   const listActivity = () => {
     return filteredActivities.map(({ email, path, time, item, items, price }, i) => {
@@ -23,6 +25,10 @@ function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities 
     return activities.filter(({ email }) => email.startsWith(searchPhrase))
   }
 
+  const listProducts = () => {
+    return [];
+  }
+
   return (
     <div className={classNames('Admin')}>
       <div className='activities-section'>
@@ -31,7 +37,16 @@ function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities 
           setFilteredList={setFilteredActivities}
           filterFunction={searchFunction}
           searchPlaceholder='Search by email prefix' />
-        {activities && listActivity()}
+        <div className='list-section'>
+          {activities && listActivity()}
+        </div>
+        {activities.length > 2 && <span className='scroll-for-more'>Scroll for more...</span>}
+      </div>
+
+      <div className='products-manager-section'>
+        <div className='title'>PRODUCTS MANAGER</div>
+        <AddNewProduct getProducts={getProducts} />
+        {listProducts()}
       </div>
     </div>
   );
