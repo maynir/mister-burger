@@ -67,6 +67,7 @@ function AddNewProduct({ getProducts }) {
       type='file'
       name='file'
       onChange={handleChange}
+      accept="image/png, image/gif, image/jpeg"
     />
     <label>Price:</label>
     <input
