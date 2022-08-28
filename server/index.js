@@ -8,11 +8,13 @@ const app = express();
 const port = 3001;
 const fs = require('fs');
 const sessions = {};
+
 const USERS_FILE = './server/users.json';
 const PRODUCTS_FILE = './server/products.json';
 const CART_FILE = './server/cart.json';
 const PURCHASES_FILE = './server/purchases.json';
 const USER_ACTIVITY_FILE = './server/user_activity.json';
+
 const ADMIN_URLS = ['/users-activities', '/add-product'];
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
