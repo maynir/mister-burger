@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
     cb(null, `${ __dirname }/../client/public/images`)
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname)
+    cb(null, file.originalname.replaceAll(' ', '_'))
   }
 })
 const upload = multer({ storage: storage });
@@ -210,7 +210,7 @@ app.get('/users-activities', (req, res) => {
 })
 
 app.post('/add-product', upload.single('file'), (req, res) => {
-  const img = req.file.originalname
+  const img = req.file.originalname.replaceAll(' ', '_');
   const { title, productType, description, price } = req.body;
 
   const newProductJson = { [title]: { description, img, price } }
@@ -222,6 +222,34 @@ app.post('/add-product', upload.single('file'), (req, res) => {
   fs.writeFile(PRODUCTS_FILE, JSON.stringify(products), 'utf8', function (err) {
     if (err) {
       console.log("An error occured while writing Purchase JSON Object to File.");
+      return console.log(err);
+    }
+  });
+
+  res.end();
+})
+
+app.put('/remove-product', (req, res) => {
+  const productType = req.body.productType
+  const productName = req.body.productName;
+
+  const rawProducts = fs.readFileSync(PRODUCTS_FILE);
+  const products = JSON.parse(rawProducts);
+  const productsOfType = products[productType] || {};
+  const filePath = productsOfType[productName].img;
+
+  fs.unlink(`${ __dirname }/../client/public/images/${ filePath }`, (err => {
+    if (err) console.log(err);
+    else {
+      console.log(`\nDeleted file: ${ filePath }`);
+    }
+  }));
+  delete productsOfType[productName];
+  products[productType] = productsOfType;
+
+  fs.writeFile(PRODUCTS_FILE, JSON.stringify(products), 'utf8', function (err) {
+    if (err) {
+      console.log("An error occured while writing Product JSON Object to File.");
       return console.log(err);
     }
   });

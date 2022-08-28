@@ -5,8 +5,20 @@ import UserActivityItem from '../UserActivityItem/UserActivityItem'
 import Search from '../Search/Search';
 import AddNewProduct from '../AddNewProduct/AddNewProduct'
 import Item from '../Item/Item';
+import axios from 'axios';
 
 function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities, getProducts, products }) {
+
+  const removeProduct = async (productType, productName) => {
+    try {
+      await axios.put('/remove-product', { productType, productName });
+      await getProducts();
+      alert('Removed new product');
+    } catch (error) {
+      console.log(error.message);
+      alert('Something went wrong...');
+    }
+  }
 
   const menuSection = (type) => {
     return <div className='menu-section'>
@@ -22,7 +34,7 @@ function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities,
           productDesc={productInfo.description}
           productImg={productInfo.img}
           productPrice={productInfo.price} />
-        <button onClick={() => { }}>Remove from store</button>
+        <button onClick={() => removeProduct(type, product)}>Remove from store</button>
       </div>
     });
   }
