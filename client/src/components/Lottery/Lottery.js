@@ -14,7 +14,8 @@ const Lottery = ({ loggedInEmail }) => {
   };
 
   const getUserLotteryStatus = async () => {
-
+    const res = await axios.get('/lottry-status');
+    setUserLotteryStatus(res.status);
   }
 
   useEffect(() => {

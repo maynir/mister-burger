@@ -9,11 +9,13 @@ const port = 3001;
 const fs = require('fs');
 const sessions = {};
 
+const ONE_DAY = 1000 * 60 * 60 * 24;
 const USERS_FILE = './server/users.json';
 const PRODUCTS_FILE = './server/products.json';
 const CART_FILE = './server/cart.json';
 const PURCHASES_FILE = './server/purchases.json';
 const USER_ACTIVITY_FILE = './server/user_activity.json';
+const LOTTERY_FILE = './server/lottery.json';
 
 const ADMIN_URLS = ['/users-activities', '/add-product'];
 const storage = multer.diskStorage({
@@ -271,8 +273,35 @@ app.put('/remove-product', (req, res) => {
   res.end();
 })
 
+app.get('/lottry-status', (req, res) => {
+  const email = res.locals.email;
+
+  const rawLotteryStatuses = fs.readFileSync(LOTTERY_FILE);
+  const lotteryStatuses = JSON.parse(rawLotteryStatuses);
+  let userLotteryStatus = lotteryStatuses[email] || { status: 'not_participated' };
+
+  if (userLotteryStatus.status === 'participated' && userLotteryStatus.lotteryDate) {
+    const today = new Date();
+    const lotteryDate = new Date(userLotteryStatus.lotteryDate)
+    let differenceInTime = today.getTime() - lotteryDate.getTime();
+    let differenceInDays = differenceInTime / ONE_DAY;
+
+    if (differenceInDays > 30) {
+      userLotteryStatus.status = 'not_participated';
+      delete userLotteryStatus.lotteryDate;
+      fs.writeFile(LOTTERY_FILE, JSON.stringify({ ...lotteryStatuses, [email]: userLotteryStatus }), 'utf8', function (err) {
+        if (err) {
+          console.log("An error occured while writing Purchase JSON Object to File.");
+          return console.log(err);
+        }
+      });
+    }
+  }
+
+  res.json({ ...userLotteryStatus });
+})
 function setCookieAndSession(email, password, rememberMe, res) {
-  const experationTime = rememberMe ? 1000 * 60 * 60 * 24 * 10 : 1000 * 60 * 30;
+  const experationTime = rememberMe ? ONE_DAY * 10 : 1000 * 60 * 30;
   const shortPass = generateShortPass(password);
   res.cookie('shortPass', shortPass);
   sessions[shortPass] = email;
