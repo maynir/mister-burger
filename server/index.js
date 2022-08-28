@@ -2,7 +2,8 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const md5 = require('md5');
 const multer = require('multer');
-const cors = require('cors')
+const cors = require('cors');
+
 const app = express();
 const port = 3001;
 const fs = require('fs');
@@ -81,6 +82,17 @@ app.get('/products', (req, res) => {
   const rawProductsData = fs.readFileSync(PRODUCTS_FILE);
   const products = JSON.parse(rawProductsData);
   res.json({ products });
+})
+
+app.get('/flat-products', (req, res) => {
+  const rawProductsData = fs.readFileSync(PRODUCTS_FILE);
+  const products = JSON.parse(rawProductsData);
+  const flatProducts = Object.entries(products).flatMap(([productType, productsTyped]) => {
+    return Object.entries(productsTyped).flatMap(([productName, productInfo]) => {
+      return { name: productName, type: productType, description: productInfo.description, img: productInfo.img, price: productInfo.price }
+    })
+  })
+  res.json({ products: flatProducts });
 })
 
 app.use('/', (req, res, next) => {

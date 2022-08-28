@@ -7,12 +7,13 @@ import AddNewProduct from '../AddNewProduct/AddNewProduct'
 import Item from '../Item/Item';
 import axios from 'axios';
 
-function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities, getProducts, products }) {
+function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities, getProducts, products, getUserCart }) {
 
   const removeProduct = async (productType, productName) => {
     try {
       await axios.put('/remove-product', { productType, productName });
       await getProducts();
+      await getUserCart();
       alert('Removed new product');
     } catch (error) {
       console.log(error.message);
