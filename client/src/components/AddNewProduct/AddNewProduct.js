@@ -30,6 +30,7 @@ function AddNewProduct({ getProducts }) {
       }
       await axios.post('/add-product', formData);
       await getProducts();
+      setNewProduct(initialProductDetails);
       alert("Added new product");
     } catch (error) {
       console.log(error.message);

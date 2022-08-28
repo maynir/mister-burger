@@ -5,9 +5,40 @@ import UserActivityItem from '../UserActivityItem/UserActivityItem'
 import Search from '../Search/Search';
 import AddNewProduct from '../AddNewProduct/AddNewProduct'
 import Item from '../Item/Item';
+import axios from 'axios';
 
-function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities, getProducts }) {
+function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities, getProducts, products, getUserCart }) {
 
+  const removeProduct = async (productType, productName) => {
+    try {
+      await axios.put('/remove-product', { productType, productName });
+      await getProducts();
+      await getUserCart();
+      alert('Removed new product');
+    } catch (error) {
+      console.log(error.message);
+      alert('Something went wrong...');
+    }
+  }
+
+  const menuSection = (type) => {
+    return <div className='menu-section'>
+      <div className='menu-section-title'>{type.toUpperCase()}</div>
+      {itemList(type)}
+    </div>
+  }
+
+  const itemList = (type) => {
+    return Object.entries(products[type] || {}).map(([product, productInfo]) => {
+      return <div key={product} className='item-section'>
+        <Item productName={product}
+          productDesc={productInfo.description}
+          productImg={productInfo.img}
+          productPrice={productInfo.price} />
+        <button onClick={() => removeProduct(type, product)}>Remove from store</button>
+      </div>
+    });
+  }
   const listActivity = () => {
     return filteredActivities.map(({ email, path, time, item, items, price }, i) => {
       return <div key={i} className='user-activity-item-section'>
@@ -23,10 +54,6 @@ function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities,
 
   const searchFunction = (searchPhrase) => {
     return activities.filter(({ email }) => email.startsWith(searchPhrase))
-  }
-
-  const listProducts = () => {
-    return [];
   }
 
   return (
@@ -46,7 +73,9 @@ function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities,
       <div className='products-manager-section'>
         <div className='title'>PRODUCTS MANAGER</div>
         <AddNewProduct getProducts={getProducts} />
-        {listProducts()}
+        {products && menuSection('main')}
+        {products && menuSection('side')}
+        {products && menuSection('drink')}
       </div>
     </div>
   );

@@ -13,6 +13,7 @@ function Cart({ cartItems, removeItemFromCart, calcTotalPrice, toggleItemFromChe
           productImg={product.img}
           productPrice={product.price}
           isSelected={product.isSelected}
+          itemNotAvailable={product.itemNotAvailable}
           toggleItemFromCheckout={toggleItemFromCheckout} />
         <button onClick={() => removeItemFromCart(product.name)}>Remove From Cart</button>
       </div>

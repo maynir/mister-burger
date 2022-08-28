@@ -21,6 +21,7 @@ function App() {
   const [activities, setActivities] = useState([]);
   const [filteredActivities, setFilteredActivities] = useState([]);
   const [products, setProducts] = useState({});
+  const [flatProducts, setFlatProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState({});
 
   const headerRef = useRef();
@@ -29,6 +30,8 @@ function App() {
     const res = await axios.get('/products');
     setProducts(res.data.products);
     setFilteredProducts(res.data.products);
+    const resFlatProducts = await axios.get('/flat-products');
+    setFlatProducts(resFlatProducts.data.products);
   }
 
   useEffect(() => {
@@ -57,34 +60,36 @@ function App() {
     }
   }, []);
 
+  const getUserCart = async () => {
+    if (flatProducts.length === 0) return;
+    if (!isLoggedIn) return;
+    const res = await axios.get("/cart");
+    const cart = res.data.cart;
+
+    if (!cart) return;
+    let items = [];
+    Object.keys(cart).forEach(itemName => {
+      let cartItem = { name: itemName };
+      const indexOfItemInProducts = flatProducts.findIndex(item => item.name === itemName);
+      if (indexOfItemInProducts > -1) {
+        cartItem.description = flatProducts[indexOfItemInProducts].description
+        cartItem.img = flatProducts[indexOfItemInProducts].img
+        cartItem.price = flatProducts[indexOfItemInProducts].price
+      } else {
+        cartItem.itemNotAvailable = true;
+      }
+      items = [...items, cartItem];
+    })
+    setCartItems(items);
+  }
+
   useEffect(() => {
-    const getUserCart = async () => {
-      if (Object.keys(products).length === 0) return;
-      if (!isLoggedIn) return;
-      const res = await axios.get("/cart");
-      const cart = res.data.cart;
-
-      if (!cart) return;
-      let items = [];
-      Object.values(products).forEach(typedProducts => {
-        Object.keys(typedProducts).forEach(item => {
-          if (cart[item]) items = [...items, {
-            name: item,
-            description: typedProducts[item].description,
-            img: typedProducts[item].img,
-            price: typedProducts[item].price
-          }]
-        })
-      })
-      setCartItems(items);
-    }
-
     try {
       getUserCart();
     } catch (err) {
       alert('Something went wrong...')
     }
-  }, [isLoggedIn, products]);
+  }, [isLoggedIn, flatProducts]);
 
   useEffect(() => {
     const getUserActivity = async () => {
@@ -181,7 +186,9 @@ function App() {
         activities={activities}
         filteredActivities={filteredActivities}
         setFilteredActivities={setFilteredActivities}
-        getProducts={getProducts} />}
+        getProducts={getProducts}
+        products={products}
+        getUserCart={getUserCart} />}
     </div>
   );
 }
