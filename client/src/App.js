@@ -181,7 +181,8 @@ function App() {
         activities={activities}
         filteredActivities={filteredActivities}
         setFilteredActivities={setFilteredActivities}
-        getProducts={getProducts} />}
+        getProducts={getProducts}
+        products={products} />}
     </div>
   );
 }
