@@ -1,6 +1,7 @@
 import './Navigator.scss';
 import React from 'react';
 import classNames from 'classnames';
+import Swal from 'sweetalert2';
 const axios = require('axios');
 
 const Navigator = ({ headerRef, isLoggedIn, setSelectedPage, isAdmin, setIsLoggedIn, setLoggedInEmail, numItemsInCart, selectedPage, loggedInEmail, setIsAdmin }) => {
@@ -19,7 +20,7 @@ const Navigator = ({ headerRef, isLoggedIn, setSelectedPage, isAdmin, setIsLogge
       if (isAdmin) setIsAdmin(false);
       setLoggedInEmail(null);
       setSelectedPage('store');
-      alert('Logged out successfuly');
+      Swal.fire('Logged out successfuly')
     } catch (err) {
       alert('Couldnt log out...')
     }

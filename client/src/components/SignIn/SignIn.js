@@ -1,5 +1,6 @@
 import './SignIn.scss';
 import { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
 const axios = require('axios');
 
 const SignIn = ({ setSelectedPage }) => {
@@ -16,7 +17,6 @@ const SignIn = ({ setSelectedPage }) => {
   const [data, setData] = useState(initialData);
   const [validation, setValidation] = useState(initialValidation);
   const [sumbitEnabled, setSumbitEnabled] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
   const [showLoader, setLoader] = useState(false);
 
   const onSubmit = async (e) => {
@@ -26,12 +26,12 @@ const SignIn = ({ setSelectedPage }) => {
     try {
       await axios.post('/sign-in', data);
       setSelectedPage('login');
-      alert('Signed in successfully, please login to continue');
+      Swal.fire('Signed in successfully', 'Please login to continue', 'info')
     } catch (err) {
       setSumbitEnabled(true);
       setLoader(false);
       if (err.status === 303) {
-        alert('User with this email already exist')
+        Swal.fire('User with this email already exist', '', 'error')
       } else {
         alert('Sorry, something went wrong...');
       }
@@ -60,10 +60,6 @@ const SignIn = ({ setSelectedPage }) => {
 
   return (
     <div className="SignIn" id="SignIn">
-      {showAlert && <div className="alert"  >
-        <span className="closebtn" onClick={() => setShowAlert(false)}>&times;</span>
-        An email just sent to me! Thank you for filling the form.
-      </div>}
 
       <h1>Sign In:</h1>
       <form onSubmit={onSubmit}>

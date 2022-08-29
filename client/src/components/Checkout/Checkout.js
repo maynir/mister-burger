@@ -3,6 +3,7 @@ import React from 'react';
 import classNames from 'classnames';
 import Item from '../Item/Item'
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 function Checkout({ products, setSelectedPage, calcTotalPrice, loggedInEmail, setCartItems }) {
 
@@ -28,7 +29,7 @@ function Checkout({ products, setSelectedPage, calcTotalPrice, loggedInEmail, se
       await axios.post('/purchase', { purchase });
       await clearCart();
       setSelectedPage('store');
-      alert("Thank you for ordering!");
+      Swal.fire('Thank you for ordering!', '', 'success');
     } catch (error) {
       console.log(error.message);
       alert('Something went wrong...')

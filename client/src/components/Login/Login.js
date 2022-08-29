@@ -1,5 +1,6 @@
 import './Login.scss';
 import { useState, useEffect, useRef } from 'react';
+import Swal from 'sweetalert2';
 const axios = require('axios');
 
 const Login = ({ setSelectedPage, setIsLoggedIn, setLoggedInEmail, setIsAdmin }) => {
@@ -29,11 +30,11 @@ const Login = ({ setSelectedPage, setIsLoggedIn, setLoggedInEmail, setIsAdmin })
       setIsLoggedIn(true);
       if (data.email === 'admin') setIsAdmin(true);
       setLoggedInEmail(data.email);
-      alert(`Welcome ${ data.email }!`);
+      Swal.fire(`Welcome ${ data.email }!`)
     } catch (err) {
       setSumbitEnabled(true);
       setLoader(false);
-      alert('Wrong email or password...')
+      Swal.fire('Wrong email or password...', '', 'error');
     }
   };
 

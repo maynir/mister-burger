@@ -1,6 +1,7 @@
 import './AddNewProduct.scss';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 function AddNewProduct({ getProducts }) {
 
@@ -31,7 +32,7 @@ function AddNewProduct({ getProducts }) {
       await axios.post('/add-product', formData);
       await getProducts();
       setNewProduct(initialProductDetails);
-      alert("Added new product");
+      Swal.fire('Added new product', '', 'success')
     } catch (error) {
       console.log(error.message);
       alert('Something went wrong...')

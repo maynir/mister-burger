@@ -1,6 +1,7 @@
 import './ContactUs.scss';
 import { useState, useEffect } from 'react';
 import { send } from '@emailjs/browser'
+import Swal from 'sweetalert2';
 
 const ContactUs = () => {
   const initialToSend = {
@@ -22,7 +23,6 @@ const ContactUs = () => {
   const [toSend, setToSend] = useState(initialToSend);
   const [validation, setValidation] = useState(initialValidation);
   const [sumbitEnabled, setSumbitEnabled] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
   const [showLoader, setLoader] = useState(false);
 
   const onSubmit = (e) => {
@@ -39,12 +39,8 @@ const ContactUs = () => {
         console.log('SUCCESS!', response.status, response.text);
         setToSend(initialToSend);
         setSumbitEnabled(true);
-        setShowAlert(true);
+        Swal.fire('An email just sent to us!', 'Thank you for filling the form.', 'success');
         setLoader(false);
-
-        setTimeout(() => {
-          setShowAlert(false);
-        }, 10000);
       })
       .catch((err) => {
         console.log('FAILED...', err);
@@ -77,10 +73,6 @@ const ContactUs = () => {
 
   return (
     <div className="ContactUs" id="ContactUs">
-      {showAlert && <div className="alert"  >
-        <span className="closebtn" onClick={() => setShowAlert(false)}>&times;</span>
-        An email just sent to us! Thank you for filling the form.
-      </div>}
 
       <h1>CONTACT US!</h1>
       <h4>We would love to hear from you :)</h4>

@@ -12,6 +12,7 @@ import OurLifestyle from './components/OurLifestyle/OurLifestyle';
 import Admin from './components/Admin/Admin';
 import Lottery from './components/Lottery/Lottery';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -109,14 +110,15 @@ function App() {
   const addItemToCart = (name, description, img, price, update = true) => {
     if (!isLoggedIn) {
       setSelectedPage('login');
-      alert('Please login to be able to add items to your cart.')
+      Swal.fire('Please login to be able to add items to your cart.', '', 'warning')
       return;
     }
     const indexOfItemToRemove = cartItems.findIndex(item => item.name === name);
-    if (indexOfItemToRemove > -1) return alert("Item in cart already");
+
+    if (indexOfItemToRemove > -1) return Swal.fire('Item already in cart', '', 'info');
     setCartItems([...cartItems, { name, description, img, price }]);
     if (update) axios.put('/add-to-cart', { name });
-    alert("Item successfully added to cart");
+    Swal.fire('Item successfully added to cart', '', 'success');
   }
 
   const removeItemFromCart = (name) => {
@@ -125,6 +127,7 @@ function App() {
     newCartItems.splice(indexOfItemToRemove, 1);
     setCartItems(newCartItems);
     axios.put('/remove-from-cart', { name });
+    Swal.fire('Item successfully removed from cart', '', 'success');
   }
 
   const calcTotalPrice = () => {
