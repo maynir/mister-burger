@@ -1,14 +1,12 @@
 import './Lottery.scss';
 import { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
 const axios = require('axios');
 
 const Lottery = ({ loggedInEmail }) => {
 
-  const [showAlert, setShowAlert] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [userLotteryStatus, setUserLotteryStatus] = useState(null);
-  const [coupon, setCoupon] = useState(null);
-  const [userLotteryWin, setUserLotteryWin] = useState(null);
   const [showLoader, setShowLoader] = useState(false);
 
   const onClick = async (e) => {
@@ -17,10 +15,12 @@ const Lottery = ({ loggedInEmail }) => {
     setIsDisabled(true);
     const { data } = await axios.post('/lottry');
     setShowLoader(false);
-    setUserLotteryWin(data.win);
     setUserLotteryStatus(data.status);
-    if (data.win) setCoupon(data.coupon);
-    setShowAlert(true);
+    if (data.win) {
+      Swal.fire('You just won!', `Save this coupon for the next time: ${ data.coupon }`, 'success')
+    } else {
+      Swal.fire('You didnt win this time :(', 'Try again next month.', 'error')
+    }
   };
 
   const getUserLotteryStatus = async () => {
@@ -53,10 +53,6 @@ const Lottery = ({ loggedInEmail }) => {
 
   return (
     <div className="Lottery">
-      {showAlert && <div className="alert">
-        <span className="closebtn" onClick={() => setShowAlert(false)}>&times;</span>
-        {userLotteryWin ? `You just won! Save this coupon for the next time: ${ coupon }` : 'Its not your time to shine, try again next month!'}
-      </div>}
 
       <h1>Lottery</h1>
 

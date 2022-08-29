@@ -6,6 +6,7 @@ import Search from '../Search/Search';
 import AddNewProduct from '../AddNewProduct/AddNewProduct'
 import Item from '../Item/Item';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities, getProducts, products, getUserCart }) {
 
@@ -14,7 +15,7 @@ function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities,
       await axios.put('/remove-product', { productType, productName });
       await getProducts();
       await getUserCart();
-      alert('Removed new product');
+      Swal.fire('Removed product', '', 'success');
     } catch (error) {
       console.log(error.message);
       alert('Something went wrong...');

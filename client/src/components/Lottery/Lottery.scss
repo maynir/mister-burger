@@ -57,34 +57,4 @@
       margin-right: 7px;
     }
   }
-
-  .alert {
-    padding: 20px;
-    background-color: #164c67;
-    color: white;
-    margin-bottom: 15px;
-    font-size: 20px;
-    position: fixed;
-    top: 20%;
-    left: 50%;
-    z-index: 1;
-    transform: translate(-50%, -50%);
-    border-radius: 4px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-
-    .closebtn {
-      margin-left: 15px;
-      color: white;
-      font-weight: bold;
-      float: right;
-      font-size: 22px;
-      line-height: 20px;
-      cursor: pointer;
-      transition: 0.3s;
-
-      &:hover {
-        color: black;
-      }
-    }
-  }
 }
