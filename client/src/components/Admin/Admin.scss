@@ -5,6 +5,10 @@
   align-items: center;
   flex-direction: column;
 
+  .info-msg {
+    color: lightgray;
+  }
+
   .title {
     font-weight: bold;
     font-size: 23px;
@@ -13,10 +17,6 @@
   }
 
   .activities-section {
-    .scroll-for-more {
-      color: lightgray;
-    }
-
     .list-section {
       margin: 5px 0;
       max-height: 200px;

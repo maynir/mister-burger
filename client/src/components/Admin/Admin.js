@@ -40,14 +40,16 @@ function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities,
     });
   }
   const listActivity = () => {
-    return filteredActivities.map(({ email, path, time, item, items, price }, i) => {
+    return filteredActivities.map(({ email, path, time, item, items, price, win, coupon }, i) => {
       return <div key={i} className='user-activity-item-section'>
         <UserActivityItem email={email}
           path={path}
           time={time}
           item={item}
           items={items}
-          price={price} />
+          price={price}
+          win={win}
+          coupon={coupon} />
       </div>
     });
   }
@@ -60,6 +62,8 @@ function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities,
     <div className={classNames('Admin')}>
       <div className='activities-section'>
         <div className='title'>USERS ACTIVITY</div>
+        <span className='info-msg'>You might need to refresh the page</span><br/>
+        <span className='info-msg'>to see new activities</span>
         <Search originalList={activities}
           setFilteredList={setFilteredActivities}
           filterFunction={searchFunction}
@@ -67,7 +71,7 @@ function Admin({ isAdmin, activities, filteredActivities, setFilteredActivities,
         <div className='list-section'>
           {activities && listActivity()}
         </div>
-        {activities.length > 2 && <span className='scroll-for-more'>Scroll for more...</span>}
+        {activities.length > 2 && <span className='info-msg'>Scroll for more...</span>}
       </div>
 
       <div className='products-manager-section'>

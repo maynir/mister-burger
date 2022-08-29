@@ -323,6 +323,8 @@ app.post('/lottry', async (req, res) => {
     return console.log(err);
   });
 
+  addUserActivity(email, req.url, null, null, null, userLotteryStatus.win, userLotteryStatus.coupon);
+
   await new Promise((resolve) => { setTimeout(resolve, 1000 * 3) });
 
   res.json({ ...userLotteryStatus });
@@ -348,7 +350,7 @@ function generateShortPass(password) {
   return md5(password);
 }
 
-function addUserActivity(email, path, item = null, price = null, items = null) {
+function addUserActivity(email, path, item = null, price = null, items = null, lotteryWin = null, lotteryCoupon) {
   const rawActivity = fs.readFileSync(USER_ACTIVITY_FILE);
   let { activities } = JSON.parse(rawActivity);
   let newActivity = { email, path, time: (new Date()).toLocaleString() }
@@ -356,6 +358,10 @@ function addUserActivity(email, path, item = null, price = null, items = null) {
   if (path === '/purchase') {
     newActivity.price = price;
     newActivity.items = items;
+  }
+  if (path === '/lottry') {
+    newActivity.win = lotteryWin;
+    newActivity.coupon = lotteryCoupon;
   }
   activities = [...activities, newActivity];
 
