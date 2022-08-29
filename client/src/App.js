@@ -159,7 +159,8 @@ function App() {
         setLoggedInEmail={setLoggedInEmail}
         numItemsInCart={cartItems.length}
         selectedPage={selectedPage}
-        loggedInEmail={loggedInEmail} />
+        loggedInEmail={loggedInEmail}
+        setIsAdmin={setIsAdmin} />
       <StoreHeader headerRef={headerRef} />
       {selectedPage === 'login' &&
         <Login setSelectedPage={setSelectedPage}
