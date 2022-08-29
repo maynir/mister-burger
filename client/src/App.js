@@ -158,7 +158,8 @@ function App() {
         setIsLoggedIn={setIsLoggedIn}
         setLoggedInEmail={setLoggedInEmail}
         numItemsInCart={cartItems.length}
-        selectedPage={selectedPage} />
+        selectedPage={selectedPage}
+        loggedInEmail={loggedInEmail} />
       <StoreHeader headerRef={headerRef} />
       {selectedPage === 'login' &&
         <Login setSelectedPage={setSelectedPage}
@@ -190,7 +191,7 @@ function App() {
         getProducts={getProducts}
         products={products}
         getUserCart={getUserCart} />}
-      {selectedPage === 'lottery' && <Lottery loggedInEmail={loggedInEmail}/>}
+      {selectedPage === 'lottery' && <Lottery loggedInEmail={loggedInEmail} />}
     </div>
   );
 }

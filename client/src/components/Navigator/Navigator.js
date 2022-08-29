@@ -3,7 +3,7 @@ import React from 'react';
 import classNames from 'classnames';
 const axios = require('axios');
 
-const Navigator = ({ headerRef, isLoggedIn, setSelectedPage, isAdmin, setIsLoggedIn, setLoggedInEmail, numItemsInCart, selectedPage }) => {
+const Navigator = ({ headerRef, isLoggedIn, setSelectedPage, isAdmin, setIsLoggedIn, setLoggedInEmail, numItemsInCart, selectedPage, loggedInEmail }) => {
   const jumpTo = (ref) => {
     ref.current.scrollIntoView({ behavior: 'smooth' });
   };
@@ -37,6 +37,7 @@ const Navigator = ({ headerRef, isLoggedIn, setSelectedPage, isAdmin, setIsLogge
       {!isLoggedIn && <button className={classNames("tab", { selected: selectedPage === 'signIn' })} onClick={() => changePage('signIn')}>Sign In</button>}
       {!isLoggedIn && <button className={classNames("tab", { selected: selectedPage === 'login' })} onClick={() => changePage('login')}>Log In</button>}
       {isLoggedIn && <button className='tab' onClick={() => logOut()}>Log Out</button>}
+      <button className='tab' disabled={true}>Hello {loggedInEmail}</button>
       <button className="up" onClick={() => jumpTo(headerRef)}>UP</button>
     </div>
   );
