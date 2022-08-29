@@ -1,5 +1,5 @@
 import './Login.scss';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 const axios = require('axios');
 
 const Login = ({ setSelectedPage, setIsLoggedIn, setLoggedInEmail, setIsAdmin }) => {
@@ -9,10 +9,15 @@ const Login = ({ setSelectedPage, setIsLoggedIn, setLoggedInEmail, setIsAdmin })
     rememberMe: false
   };
 
+  const buttonRef = useRef();
   const [data, setData] = useState(initialData);
   const [sumbitEnabled, setSumbitEnabled] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [showLoader, setLoader] = useState(false);
+
+  useEffect(() => {
+    buttonRef.current.focus();
+  });
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -77,7 +82,7 @@ const Login = ({ setSelectedPage, setIsLoggedIn, setLoggedInEmail, setIsAdmin })
         <div className="navigator-container">
           <button className="navigator" onClick={() => setSelectedPage('signIn')}>Sign In</button>
         </div>
-        <button className="login-button" disabled={!sumbitEnabled} type='submit'>
+        <button ref={buttonRef} className="login-button" disabled={!sumbitEnabled} type='submit'>
           {showLoader && <i className="fa fa-spinner fa-spin"></i>}
           Login
         </button>

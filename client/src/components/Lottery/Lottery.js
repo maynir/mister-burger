@@ -7,17 +7,20 @@ const Lottery = ({ loggedInEmail }) => {
   const [showAlert, setShowAlert] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [userLotteryStatus, setUserLotteryStatus] = useState(null);
+  const [coupon, setCoupon] = useState(null);
   const [userLotteryWin, setUserLotteryWin] = useState(null);
-  const [showLoader, setLoader] = useState(false);
-  const [sumbitEnabled, setSumbitEnabled] = useState(true);
+  const [showLoader, setShowLoader] = useState(false);
 
   const onClick = async (e) => {
     e.preventDefault();
-    const res = await axios.post('/lottry');
-    setUserLotteryWin(res.win);
-    setUserLotteryStatus(res.status);
-    setShowAlert(true);
+    setShowLoader(true);
     setIsDisabled(true);
+    const { data } = await axios.post('/lottry');
+    setShowLoader(false);
+    setUserLotteryWin(data.win);
+    setUserLotteryStatus(data.status);
+    if (data.win) setCoupon(data.coupon);
+    setShowAlert(true);
   };
 
   const getUserLotteryStatus = async () => {
@@ -31,7 +34,8 @@ const Lottery = ({ loggedInEmail }) => {
 
   const alreadyParticipated = () => {
     return <div>
-
+      <h2>Hi {loggedInEmail}, we see you've already participated in this month lottery.</h2>
+      <h3>Try again next month :)</h3>
     </div>
   }
 
@@ -51,7 +55,7 @@ const Lottery = ({ loggedInEmail }) => {
     <div className="Lottery">
       {showAlert && <div className="alert">
         <span className="closebtn" onClick={() => setShowAlert(false)}>&times;</span>
-        {userLotteryWin ? 'You just won!' : 'Its not your time to shine, try again next month!'}
+        {userLotteryWin ? `You just won! Save this coupon for the next time: ${ coupon }` : 'Its not your time to shine, try again next month!'}
       </div>}
 
       <h1>Lottery</h1>

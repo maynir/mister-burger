@@ -301,7 +301,7 @@ app.get('/lottry-status', (req, res) => {
   res.json({ ...userLotteryStatus });
 })
 
-app.post('/lottry', (req, res) => {
+app.post('/lottry', async (req, res) => {
   const email = res.locals.email;
 
   const rawLotteryStatuses = fs.readFileSync(LOTTERY_FILE);
@@ -313,14 +313,17 @@ app.post('/lottry', (req, res) => {
   userLotteryStatus.status = 'participated';
   userLotteryStatus.lotteryDate = new Date();
 
-  let lotteryNumber = Math.floor(Math.random() * 10);
+  let lotteryNumber = Math.floor(Math.random() * 10); // random number between 0 to 9
   userLotteryStatus.win = lotteryNumber == 1;
+  if (userLotteryStatus.win) userLotteryStatus.coupon = `FREE-MEAL-${ new Date().valueOf() }`;
 
   fs.writeFile(LOTTERY_FILE, JSON.stringify({ ...lotteryStatuses, [email]: userLotteryStatus }), 'utf8', (err) => {
     if (!err) return;
     console.log("An error occured while writing Lottery JSON Object to File.");
     return console.log(err);
   });
+
+  await new Promise((resolve) => { setTimeout(resolve, 1000 * 3) });
 
   res.json({ ...userLotteryStatus });
 })
