@@ -2,7 +2,7 @@ import './UserActivityItem.scss';
 import React from 'react';
 import classNames from 'classnames';
 
-const UserActivityItem = ({ email, path, time, item, items, price }) => {
+const UserActivityItem = ({ email, path, time, item, items, price, win, coupon }) => {
   const capitalizeFirstLetter = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
@@ -16,6 +16,8 @@ const UserActivityItem = ({ email, path, time, item, items, price }) => {
         {item && <div className={classNames('item')}>Item: {capitalizeFirstLetter(item)}.</div>}
         {items && <div className={classNames('items')}>Itmes: {items.map(item => capitalizeFirstLetter(item)).join(', ')}.</div>}
         {price && <div className={classNames('price')}>Price: {price}$</div>}
+        {typeof win == "boolean" && <div className={classNames('win')}>Win: {capitalizeFirstLetter(win.toString())}</div>}
+        {win && coupon && <div className={classNames('coupon')}>Coupon: {coupon}</div>}
       </div>
     </div>
   );

@@ -1,0 +1,90 @@
+.Lottery {
+  background-color: #121818;
+  color: white;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 250px;
+  flex-direction: column;
+
+  .big {
+    font-family: Parata;
+  }
+
+  h1 {
+    font-weight: 600;
+    font-size: 72px;
+    color: white;
+    text-align: center;
+    margin: 0;
+    font-family: Parata;
+  }
+
+  h2 {
+    line-height: 1.5;
+  }
+
+  .info {
+    color: grey;
+  }
+
+  button {
+    font-weight: 600;
+    font-family: "Courier New", Courier, monospace;
+    border: none;
+    transition: all 0.3s;
+    background-color: #1f2c28;
+    color: white;
+    border-radius: 4px;
+    margin: 30px 0;
+    font-size: x-large;
+    padding: 15px;
+
+    &:enabled:hover {
+      color: white;
+      background-color: black;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      background-color: #121818;
+      border: 3.5px #1f2c28 solid;
+    }
+
+    i {
+      margin-right: 7px;
+    }
+  }
+
+  .alert {
+    padding: 20px;
+    background-color: #164c67;
+    color: white;
+    margin-bottom: 15px;
+    font-size: 20px;
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+    border-radius: 4px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+    .closebtn {
+      margin-left: 15px;
+      color: white;
+      font-weight: bold;
+      float: right;
+      font-size: 22px;
+      line-height: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+
+      &:hover {
+        color: black;
+      }
+    }
+  }
+}

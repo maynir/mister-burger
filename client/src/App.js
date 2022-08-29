@@ -10,6 +10,7 @@ import Checkout from './components/Checkout/Checkout';
 import ContactUs from './components/ContactUs/ContactUs'
 import OurLifestyle from './components/OurLifestyle/OurLifestyle';
 import Admin from './components/Admin/Admin';
+import Lottery from './components/Lottery/Lottery';
 import axios from 'axios';
 
 function App() {
@@ -189,6 +190,7 @@ function App() {
         getProducts={getProducts}
         products={products}
         getUserCart={getUserCart} />}
+      {selectedPage === 'lottery' && <Lottery loggedInEmail={loggedInEmail}/>}
     </div>
   );
 }
