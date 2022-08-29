@@ -35,12 +35,12 @@ const Navigator = ({ headerRef, isLoggedIn, setSelectedPage, isAdmin, setIsLogge
       <button className={classNames("tab", { selected: selectedPage === 'readme' })} onClick={() => changePage('readme')}>Readme</button>
       {isAdmin && <button className={classNames("tab", { selected: selectedPage === 'admin' })} onClick={() => changePage('admin')}>Admin</button>}
       {isLoggedIn && <button className={classNames("tab", { selected: selectedPage === 'cart' })} onClick={() => changePage('cart')}>
-        <i class="fa fa-shopping-cart" aria-hidden="true"></i> Cart ({numItemsInCart})
+        <i className="fa fa-shopping-cart" aria-hidden="true"></i> Cart ({numItemsInCart})
       </button>}
       {!isLoggedIn && <button className={classNames("tab", { selected: selectedPage === 'signIn' })} onClick={() => changePage('signIn')}>Sign In</button>}
       {!isLoggedIn && <button className={classNames("tab", { selected: selectedPage === 'login' })} onClick={() => changePage('login')}>Log In</button>}
       {isLoggedIn && <button className='tab' onClick={() => logOut()}>
-        <i class="fa fa-sign-out" aria-hidden="true"></i> Log Out
+        <i className="fa fa-sign-out" aria-hidden="true"></i> Log Out
       </button>}
       {loggedInEmail && <button className='tab' disabled={true}>Hello {loggedInEmail}</button>}
       <button className="up" onClick={() => jumpTo(headerRef)}>UP</button>
