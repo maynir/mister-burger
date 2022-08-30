@@ -2,7 +2,6 @@ import './Cart.scss';
 import React from 'react';
 import classNames from 'classnames';
 import SelectableItem from '../SelectableItem/SelectableItem';
-import Swal from 'sweetalert2';
 
 function Cart({ cartItems, removeItemFromCart, calcTotalPrice, toggleItemFromCheckout, setSelectedPage }) {
 
