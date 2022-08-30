@@ -18,7 +18,7 @@ const Login = ({ setSelectedPage, setIsLoggedIn, setLoggedInEmail, setIsAdmin })
 
   useEffect(() => {
     buttonRef.current.focus();
-  });
+  }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();
