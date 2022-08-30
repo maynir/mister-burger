@@ -11,6 +11,7 @@ import ContactUs from './components/ContactUs/ContactUs'
 import OurLifestyle from './components/OurLifestyle/OurLifestyle';
 import Admin from './components/Admin/Admin';
 import Lottery from './components/Lottery/Lottery';
+import Recipe from './components/Recipe/Recipe';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
@@ -196,6 +197,7 @@ function App() {
         products={products}
         getUserCart={getUserCart} />}
       {selectedPage === 'lottery' && <Lottery loggedInEmail={loggedInEmail} />}
+      {selectedPage === 'recipe' && <Recipe />}
     </div>
   );
 }
