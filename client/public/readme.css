@@ -1,0 +1,41 @@
+.Readme {
+  background-color: #121818;
+  color: white;
+  height: auto;
+  padding: 50px 250px;
+  text-align: -webkit-center;
+}
+
+h1 {
+  font-weight: 600;
+  font-size: 72px;
+  color: white;
+  text-align: center;
+  margin: 0;
+  font-family: Parata;
+}
+
+h2 {
+  line-height: 1.5;
+  font-size: 35px;
+  width: fit-content;
+}
+
+h3 {
+  width: fit-content;
+}
+
+
+hr {
+  margin-bottom: 20px;
+}
+
+.Readme div {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+ul {
+  text-align: left;
+  width: 400px;
+}
