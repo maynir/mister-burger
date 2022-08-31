@@ -17,7 +17,7 @@ const PURCHASES_FILE = './server/purchases.json';
 const USER_ACTIVITY_FILE = './server/user_activity.json';
 const LOTTERY_FILE = './server/lottery.json';
 
-const ADMIN_URLS = ['/users-activities', '/add-product'];
+const ADMIN_URLS = ['/users-activities', '/add-product', '/remove-product'];
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, `${ __dirname }/../client/public/images`)
