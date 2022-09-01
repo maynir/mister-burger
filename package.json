@@ -3,9 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "main": "server/index.js",
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
   "scripts": {
     "start": "node server/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=test jest --testTimeout=10000"
   },
   "repository": {
     "type": "git",
@@ -27,5 +33,10 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sass": "^1.53.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "jest": "^29.0.1",
+    "supertest": "^6.2.4"
   }
 }

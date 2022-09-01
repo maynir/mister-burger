@@ -9,13 +9,14 @@ const port = 3001;
 const fs = require('fs');
 const sessions = {};
 
+const databaseFolder = process.env.NODE_ENV === 'test' ? '/test' : '';
 const ONE_DAY = 1000 * 60 * 60 * 24;
-const USERS_FILE = './server/users.json';
-const PRODUCTS_FILE = './server/products.json';
-const CART_FILE = './server/cart.json';
-const PURCHASES_FILE = './server/purchases.json';
-const USER_ACTIVITY_FILE = './server/user_activity.json';
-const LOTTERY_FILE = './server/lottery.json';
+const USERS_FILE = `./server${ databaseFolder }/database_files/users.json`;
+const PRODUCTS_FILE = `./server${ databaseFolder }/database_files/products.json`;
+const CART_FILE = `./server${ databaseFolder }/database_files/cart.json`;
+const PURCHASES_FILE = `./server${ databaseFolder }/database_files/purchases.json`;
+const USER_ACTIVITY_FILE = `./server${ databaseFolder }/database_files/user_activity.json`;
+const LOTTERY_FILE = `./server${ databaseFolder }/database_files/lottery.json`;
 
 const ADMIN_URLS = ['/users-activities', '/add-product', '/remove-product'];
 const storage = multer.diskStorage({
@@ -34,14 +35,11 @@ app.use(express.json());
 app.use('/', express.static(__dirname + '/'));
 app.use(cookieParser());
 
-app.listen(port, () => {
-  console.log(`Listening on port: ${ port }`);
-})
-
 app.get('/username', (req, res) => {
-  console.log('username', sessions[(req.cookies)?.shortPass]);
-  res.json({ email: sessions[(req.cookies)?.shortPass] || "" });
-})
+  let email = '';
+  if (req.cookies && req.cookies.shortPass && sessions[req.cookies.shortPass]) email = sessions[req.cookies.shortPass]
+  res.json({ email });
+});
 
 app.post("/sign-in", (req, res) => {
   const userData = {};
@@ -111,6 +109,7 @@ app.use('/', (req, res, next) => {
   } else {
     res.statusCode = 401;
     console.log("Not authorized to do this action.")
+    res.end();
   }
 })
 
@@ -372,3 +371,9 @@ function addUserActivity(email, path, item = null, price = null, items = null, l
     }
   });
 }
+
+app.listen(port, () => {
+  console.log(`Listening on port: ${ port }`);
+})
+
+module.exports = app;

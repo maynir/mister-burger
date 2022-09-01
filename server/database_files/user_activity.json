@@ -1,0 +1,30 @@
+{
+  "activities": [
+    {
+      "email": "admin",
+      "path": "/login",
+      "time": "8/18/2022, 6:03:57 PM"
+    },
+    {
+      "email": "admin",
+      "path": "/lottry",
+      "time": "8/29/2022, 9:42:17 PM",
+      "win": false
+    },
+    {
+      "email": "admin",
+      "path": "/log-out",
+      "time": "8/29/2022, 9:46:31 PM"
+    },
+    {
+      "email": "admin",
+      "path": "/login",
+      "time": "8/29/2022, 9:46:35 PM"
+    },
+    {
+      "email": "admin",
+      "path": "/log-out",
+      "time": "9/1/2022, 11:06:50 AM"
+    }
+  ]
+}
