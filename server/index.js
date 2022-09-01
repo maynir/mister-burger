@@ -101,7 +101,7 @@ app.use('/', (req, res, next) => {
   const email = sessions[shortPass];
   console.log(req.url);
 
-  if ((ADMIN_URLS.includes(req.url) && email && email === 'admin') || (req.url !== 'users-activities' && email)) {
+  if ((ADMIN_URLS.includes(req.url) && email && email === 'admin') || (!ADMIN_URLS.includes(req.url) && email)) {
     console.log(`logged in email: ${ email }`);
     res.locals.email = email;
     next();
@@ -207,14 +207,13 @@ app.post('/purchase', (req, res) => {
   fs.writeFile(PURCHASES_FILE, JSON.stringify(purchasesData), 'utf8', function (err) {
     if (err) {
       console.log("An error occured while writing Purchase JSON Object to File.");
-      return console.log(err);
+      return res.end();
     }
+
     console.log('new purchase', JSON.stringify({ [purchaseId]: newPurchase }));
+    addUserActivity(email, req.url, null, newPurchase.price, newPurchase.items.map(({ name }) => name));
+    res.end();
   });
-
-  addUserActivity(email, req.url, null, newPurchase.price, newPurchase.items.map(({ name }) => name));
-
-  res.end();
 })
 
 app.get('/users-activities', (req, res) => {

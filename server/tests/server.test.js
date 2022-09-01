@@ -28,6 +28,11 @@ const products = {
 };
 
 describe('Server end points', () => {
+
+  beforeAll(() => {
+    jest.useFakeTimers().setSystemTime(new Date('2020-01-01'));
+  })
+
   it('User not logged in in', async () => {
     const res = await request(app).get('/username').set('Cookie', `shortPass=${ md5('user_password') }`)
     expect(res.body.email).toEqual(undefined);
@@ -64,12 +69,7 @@ describe('Server end points', () => {
   })
 
   it('User login', async () => {
-    const res = await request(app)
-      .post('/login')
-      .send({
-        email: 'user_email',
-        password: 'user_password'
-      })
+    const res = await request(app).post('/login').send({ email: 'user_email', password: 'user_password' });
     expect(res.statusCode).toEqual(201);
   })
 
@@ -145,7 +145,77 @@ describe('Server end points', () => {
     expect(res.statusCode).toEqual(401);
   })
 
+  it('Get emptyt cart', async () => {
+    // log in before
+    await request(app).post('/login').send({ email: 'user_email', password: 'user_password' })
 
+    const res = await request(app).get('/cart').set('Cookie', `shortPass=${ md5('user_password') }`);
+    expect(res.body.cart).toEqual(undefined);
+  })
+
+  it('Add item to cart', async () => {
+    const addRes = await request(app).put('/add-to-cart').send({ name: 'main_product' }).set('Cookie', `shortPass=${ md5('user_password') }`);
+    expect(addRes.statusCode).toEqual(200);
+    const res = await request(app).get('/cart').set('Cookie', `shortPass=${ md5('user_password') }`);
+    expect(res.body.cart).toEqual({ main_product: true });
+  })
+
+  it('Remove item from cart', async () => {
+    const addRes = await request(app).put('/remove-from-cart').send({ name: 'main_product' }).set('Cookie', `shortPass=${ md5('user_password') }`);
+    expect(addRes.statusCode).toEqual(200);
+    const res = await request(app).get('/cart').set('Cookie', `shortPass=${ md5('user_password') }`);
+    expect(res.body.cart).toEqual({});
+  })
+
+  it('Delete full cart', async () => {
+    await request(app).put('/remove-from-cart').send({ name: 'main_product' }).set('Cookie', `shortPass=${ md5('user_password') }`);
+    await request(app).put('/remove-from-cart').send({ name: 'side_product' }).set('Cookie', `shortPass=${ md5('user_password') }`);
+    const res = await request(app).get('/cart').set('Cookie', `shortPass=${ md5('user_password') }`);
+    expect(res.body.cart).toEqual({});
+  })
+
+  it('Make a purchase', async () => {
+    const purchase = {
+      items: [{
+        name: "main_product",
+        description: "main_product_desc",
+        img: "main_product.png",
+        price: 20,
+        isSelected: true
+      }],
+      price: 20
+    }
+    const res = await request(app).post('/purchase').send({ purchase }).set('Cookie', `shortPass=${ md5('user_password') }`);
+    expect(res.statusCode).toEqual(200);
+  })
+
+  it('Not an admin user cant access /users-activities', async () => {
+    const res = await request(app).get('/users-activities').set('Cookie', `shortPass=${ md5('user_password') }`);
+    expect(res.statusCode).toEqual(401);
+  })
+
+  it('Not an admin user cant access /add-product', async () => {
+    const res = await request(app).post('/add-product').set('Cookie', `shortPass=${ md5('user_password') }`);
+    expect(res.statusCode).toEqual(401);
+  })
+
+  it('Not an admin user cant access /remove-product', async () => {
+    const res = await request(app).put('/remove-product').set('Cookie', `shortPass=${ md5('user_password') }`);
+    expect(res.statusCode).toEqual(401);
+  })
+
+  it('Admin user', async () => {
+    // log out from normal user
+    await request(app).post('/log-out').set('Cookie', `shortPass=${ md5('user_password') }`);
+
+    const res = await request(app).post('/login').send({ email: 'admin', password: 'admin' });
+    expect(res.statusCode).toEqual(201);
+  })
+
+  it('Users activities', async () => {
+    const res = await request(app).get('/users-activities').set('Cookie', `shortPass=${ md5('admin') }`);
+    expect(res.body.activities).toEqual([{ "email": "user_email", "path": "/login", "time": "1/1/2020, 2:00:00 AM" }, { "email": "user_email", "path": "/log-out", "time": "1/1/2020, 2:00:00 AM" }, { "email": "user_email", "path": "/login", "time": "1/1/2020, 2:00:00 AM" }, { "email": "user_email", "item": "main_product", "path": "/add-to-cart", "time": "1/1/2020, 2:00:00 AM" }, { "email": "user_email", "path": "/remove-from-cart", "time": "1/1/2020, 2:00:00 AM" }, { "email": "user_email", "path": "/remove-from-cart", "time": "1/1/2020, 2:00:00 AM" }, { "email": "user_email", "path": "/remove-from-cart", "time": "1/1/2020, 2:00:00 AM" }, { "email": "user_email", "items": ["main_product"], "path": "/purchase", "price": 20, "time": "1/1/2020, 2:00:00 AM" }, { "email": "user_email", "path": "/log-out", "time": "1/1/2020, 2:00:00 AM" }, { "email": "admin", "path": "/login", "time": "1/1/2020, 2:00:00 AM" }]);
+  })
 
   // resete json files
   afterAll(() => {
