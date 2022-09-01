@@ -1,7 +1,7 @@
 const request = require('supertest');
 const app = require('../index.js');
 const fs = require('fs');
-const databaseFiles = ['cart', 'lottery', 'purchases', 'user_activity'];
+const databaseFiles = ['cart', 'lottery', 'purchases'];
 
 describe('Server end points', () => {
   it('User not logged in', async () => {
@@ -23,11 +23,32 @@ describe('Server end points', () => {
     expect(signInRes.statusCode).toEqual(200);
   })
 
-  // delete all data from files
+  it('User login with wrong infp', async () => {
+    const signInRes = await request(app)
+      .post('/login')
+      .send({
+        email: 'user_email_not_exist',
+        password: 'user_password'
+      })
+    expect(signInRes.statusCode).toEqual(401);
+  })
+
+  it('User login', async () => {
+    const signInRes = await request(app)
+      .post('/login')
+      .send({
+        email: 'user_email',
+        password: 'user_password'
+      })
+    expect(signInRes.statusCode).toEqual(201);
+  })
+
+  // resete json files
   afterAll(() => {
     databaseFiles.forEach((fileName) => {
       fs.writeFile(`./server/tests/database_files/${ fileName }.json`, JSON.stringify({}), 'utf8', () => { });
     })
     fs.writeFile('./server/tests/database_files/users.json', JSON.stringify({ admin: 'admin' }), 'utf8', () => { });
+    fs.writeFile('./server/tests/database_files/user_activity.json', JSON.stringify({ activities: [] }), 'utf8', () => { });
   });
 })
