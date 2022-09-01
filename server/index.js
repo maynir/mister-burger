@@ -37,7 +37,7 @@ app.use(cookieParser());
 
 app.get('/username', (req, res) => {
   let email = '';
-  if (req.cookies && req.cookies.shortPass && sessions[req.cookies.shortPass]) email = sessions[req.cookies.shortPass]
+  if (getShortPass(req)) email = sessions[getShortPass(req)]
   res.json({ email });
 });
 
@@ -115,7 +115,7 @@ app.use('/', (req, res, next) => {
 
 app.post("/log-out", (req, res) => {
   const email = res.locals.email;
-  const shortPass = (req.cookies)?.shortPass;
+  const shortPass = getShortPass(req);
 
   if (sessions[shortPass]) {
     delete sessions[shortPass];
@@ -370,6 +370,11 @@ function addUserActivity(email, path, item = null, price = null, items = null, l
       return console.log(err);
     }
   });
+}
+
+function getShortPass(req) {
+  if (req.cookies && req.cookies.shortPass) return req.cookies.shortPass;
+  return '';
 }
 
 app.listen(port, () => {
