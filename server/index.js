@@ -9,7 +9,7 @@ const port = 3001;
 const fs = require('fs');
 const sessions = {};
 
-const databaseFolder = process.env.NODE_ENV === 'test' ? '/test' : '';
+const databaseFolder = process.env.NODE_ENV === 'test' ? '/tests' : '';
 const ONE_DAY = 1000 * 60 * 60 * 24;
 const USERS_FILE = `./server${ databaseFolder }/database_files/users.json`;
 const PRODUCTS_FILE = `./server${ databaseFolder }/database_files/products.json`;
@@ -61,8 +61,8 @@ app.post("/sign-in", (req, res) => {
       return console.log(err);
     }
     console.log(`Created new user with email: ${ email }`);
+    res.end();
   });
-  res.end();
 });
 
 app.post("/login", (req, res) => {
