@@ -97,7 +97,7 @@ app.get('/flat-products', (req, res) => {
 })
 
 app.use('/', (req, res, next) => {
-  const shortPass = (req.cookies)?.shortPass;
+  const shortPass = getShortPass(req);
   const email = sessions[shortPass];
   console.log(req.url);
 

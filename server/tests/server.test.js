@@ -28,7 +28,7 @@ const products = {
 };
 
 describe('Server end points', () => {
-  it('User not logged in', async () => {
+  it('User not logged in in', async () => {
     const res = await request(app).get('/username').set('Cookie', `shortPass=${ md5('user_password') }`)
     expect(res.body.email).toEqual(undefined);
   })
@@ -94,6 +94,58 @@ describe('Server end points', () => {
     const usernameRes = await request(app).get('/username').set('Cookie', `shortPass=${ md5('user_password') }`);
     expect(usernameRes.body.email).toEqual(undefined);
   })
+
+  it('If user not logged in cant access /log-out', async () => {
+    const res = await request(app).post('/log-out').set('Cookie', `shortPass=${ md5('user_password') }`);
+    expect(res.statusCode).toEqual(401);
+  })
+
+  it('If user not logged in cant access /add-to-cart', async () => {
+    const res = await request(app).put('/add-to-cart').set('Cookie', `shortPass=${ md5('user_password') }`);
+    expect(res.statusCode).toEqual(401);
+  })
+
+  it('If user not logged in cant access /remove-from-cart', async () => {
+    const res = await request(app).put('/remove-from-cart').set('Cookie', `shortPass=${ md5('user_password') }`);
+    expect(res.statusCode).toEqual(401);
+  })
+
+  it('If user not logged in cant access /cart', async () => {
+    const res = await request(app).get('/cart').set('Cookie', `shortPass=${ md5('user_password') }`);
+    expect(res.statusCode).toEqual(401);
+  })
+
+  it('If user not logged in cant access /cart', async () => {
+    const res = await request(app).delete('/cart').set('Cookie', `shortPass=${ md5('user_password') }`);
+    expect(res.statusCode).toEqual(401);
+  })
+
+  it('If user not logged in cant access /purchase', async () => {
+    const res = await request(app).post('/purchase').set('Cookie', `shortPass=${ md5('user_password') }`);
+    expect(res.statusCode).toEqual(401);
+  })
+
+  it('If user not logged in cant access /users-activities', async () => {
+    const res = await request(app).get('/users-activities').set('Cookie', `shortPass=${ md5('user_password') }`);
+    expect(res.statusCode).toEqual(401);
+  })
+
+  it('If user not logged in cant access /remove-product', async () => {
+    const res = await request(app).put('/remove-product').set('Cookie', `shortPass=${ md5('user_password') }`);
+    expect(res.statusCode).toEqual(401);
+  })
+
+  it('If user not logged in cant access /lottry-status', async () => {
+    const res = await request(app).get('/lottry-status').set('Cookie', `shortPass=${ md5('user_password') }`);
+    expect(res.statusCode).toEqual(401);
+  })
+
+  it('If user not logged in cant access /lottry', async () => {
+    const res = await request(app).post('/lottry').set('Cookie', `shortPass=${ md5('user_password') }`);
+    expect(res.statusCode).toEqual(401);
+  })
+
+
 
   // resete json files
   afterAll(() => {
