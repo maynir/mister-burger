@@ -42,7 +42,6 @@ app.get('/username', (req, res) => {
 });
 
 app.post("/sign-in", (req, res) => {
-  const userData = {};
   const email = req.body.email;
 
   let rawUsersData = fs.readFileSync(USERS_FILE);
@@ -53,9 +52,9 @@ app.post("/sign-in", (req, res) => {
   }
 
   const password = req.body.password;
-  userData[email] = password;
+  usersData[email] = password;
 
-  fs.writeFile(USERS_FILE, JSON.stringify(userData), 'utf8', function (err) {
+  fs.writeFile(USERS_FILE, JSON.stringify(usersData), 'utf8', function (err) {
     if (err) {
       console.log("An error occured while writing Users JSON Object to File.");
       return console.log(err);
