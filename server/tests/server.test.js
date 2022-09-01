@@ -23,6 +23,16 @@ describe('Server end points', () => {
     expect(signInRes.statusCode).toEqual(200);
   })
 
+  it('User sign in with the same email', async () => {
+    const signInRes = await request(app)
+      .post('/sign-in')
+      .send({
+        email: 'user_email',
+        password: 'user_password'
+      })
+    expect(signInRes.statusCode).toEqual(303);
+  })
+
   it('User login with wrong infp', async () => {
     const signInRes = await request(app)
       .post('/login')
@@ -45,10 +55,34 @@ describe('Server end points', () => {
 
   // resete json files
   afterAll(() => {
+    const products = {
+      "main": {
+        "main_product": {
+          "description": "main_product_desc",
+          "img": "main_product.png",
+          "price": 20
+        }
+      },
+      "side": {
+        "side_product": {
+          "description": "side_product_desc",
+          "img": "side_product.png",
+          "price": 10
+        }
+      },
+      "drink": {
+        "drink_product": {
+          "description": "drink_product_desc",
+          "img": "drink_product.png",
+          "price": 8
+        }
+      }
+    };
     databaseFiles.forEach((fileName) => {
       fs.writeFile(`./server/tests/database_files/${ fileName }.json`, JSON.stringify({}), 'utf8', () => { });
     })
     fs.writeFile('./server/tests/database_files/users.json', JSON.stringify({ admin: 'admin' }), 'utf8', () => { });
     fs.writeFile('./server/tests/database_files/user_activity.json', JSON.stringify({ activities: [] }), 'utf8', () => { });
+    fs.writeFile('./server/tests/database_files/products.json', JSON.stringify(products), 'utf8', () => { });
   });
 })
