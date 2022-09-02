@@ -375,8 +375,6 @@ function getShortPass(req) {
   return '';
 }
 
-app.listen(port, () => {
+module.exports = app.listen(port, () => {
   console.log(`Listening on port: ${ port }`);
 })
-
-module.exports = app;

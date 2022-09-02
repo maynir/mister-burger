@@ -263,5 +263,6 @@ describe('Server end points', () => {
     fs.writeFile('./server/tests/database_files/user_activity.json', JSON.stringify({ activities: [] }), 'utf8', () => { });
     fs.writeFile('./server/tests/database_files/products.json', JSON.stringify(products), 'utf8', () => { });
     jest.spyOn(global.Math, 'floor').mockRestore();
+    app.close();
   });
 })
