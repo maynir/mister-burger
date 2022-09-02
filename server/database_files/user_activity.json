@@ -20,6 +20,11 @@
       "email": "admin",
       "path": "/login",
       "time": "8/29/2022, 9:46:35 PM"
+    },
+    {
+      "email": "admin",
+      "path": "/log-out",
+      "time": "9/1/2022, 11:06:50 AM"
     }
   ]
 }

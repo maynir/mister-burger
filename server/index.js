@@ -9,13 +9,14 @@ const port = 3001;
 const fs = require('fs');
 const sessions = {};
 
+const databaseFolder = process.env.NODE_ENV === 'test' ? '/tests' : '';
 const ONE_DAY = 1000 * 60 * 60 * 24;
-const USERS_FILE = './server/users.json';
-const PRODUCTS_FILE = './server/products.json';
-const CART_FILE = './server/cart.json';
-const PURCHASES_FILE = './server/purchases.json';
-const USER_ACTIVITY_FILE = './server/user_activity.json';
-const LOTTERY_FILE = './server/lottery.json';
+const USERS_FILE = `./server${ databaseFolder }/database_files/users.json`;
+const PRODUCTS_FILE = `./server${ databaseFolder }/database_files/products.json`;
+const CART_FILE = `./server${ databaseFolder }/database_files/cart.json`;
+const PURCHASES_FILE = `./server${ databaseFolder }/database_files/purchases.json`;
+const USER_ACTIVITY_FILE = `./server${ databaseFolder }/database_files/user_activity.json`;
+const LOTTERY_FILE = `./server${ databaseFolder }/database_files/lottery.json`;
 
 const ADMIN_URLS = ['/users-activities', '/add-product', '/remove-product'];
 const storage = multer.diskStorage({
@@ -34,17 +35,13 @@ app.use(express.json());
 app.use('/', express.static(__dirname + '/'));
 app.use(cookieParser());
 
-app.listen(port, () => {
-  console.log(`Listening on port: ${ port }`);
-})
-
 app.get('/username', (req, res) => {
-  console.log('username', sessions[(req.cookies)?.shortPass]);
-  res.json({ email: sessions[(req.cookies)?.shortPass] || "" });
-})
+  let email = '';
+  if (getShortPass(req)) email = sessions[getShortPass(req)]
+  res.json({ email });
+});
 
 app.post("/sign-in", (req, res) => {
-  const userData = {};
   const email = req.body.email;
 
   let rawUsersData = fs.readFileSync(USERS_FILE);
@@ -55,16 +52,16 @@ app.post("/sign-in", (req, res) => {
   }
 
   const password = req.body.password;
-  userData[email] = password;
+  usersData[email] = password;
 
-  fs.writeFile(USERS_FILE, JSON.stringify(userData), 'utf8', function (err) {
+  fs.writeFile(USERS_FILE, JSON.stringify(usersData), 'utf8', function (err) {
     if (err) {
       console.log("An error occured while writing Users JSON Object to File.");
       return console.log(err);
     }
     console.log(`Created new user with email: ${ email }`);
+    res.end();
   });
-  res.end();
 });
 
 app.post("/login", (req, res) => {
@@ -100,23 +97,24 @@ app.get('/flat-products', (req, res) => {
 })
 
 app.use('/', (req, res, next) => {
-  const shortPass = (req.cookies)?.shortPass;
+  const shortPass = getShortPass(req);
   const email = sessions[shortPass];
   console.log(req.url);
 
-  if ((ADMIN_URLS.includes(req.url) && email && email === 'admin') || (req.url !== 'users-activities' && email)) {
+  if ((ADMIN_URLS.includes(req.url) && email && email === 'admin') || (!ADMIN_URLS.includes(req.url) && email)) {
     console.log(`logged in email: ${ email }`);
     res.locals.email = email;
     next();
   } else {
     res.statusCode = 401;
     console.log("Not authorized to do this action.")
+    res.end();
   }
 })
 
 app.post("/log-out", (req, res) => {
   const email = res.locals.email;
-  const shortPass = (req.cookies)?.shortPass;
+  const shortPass = getShortPass(req);
 
   if (sessions[shortPass]) {
     delete sessions[shortPass];
@@ -209,14 +207,13 @@ app.post('/purchase', (req, res) => {
   fs.writeFile(PURCHASES_FILE, JSON.stringify(purchasesData), 'utf8', function (err) {
     if (err) {
       console.log("An error occured while writing Purchase JSON Object to File.");
-      return console.log(err);
+      return res.end();
     }
+
     console.log('new purchase', JSON.stringify({ [purchaseId]: newPurchase }));
+    addUserActivity(email, req.url, null, newPurchase.price, newPurchase.items.map(({ name }) => name));
+    res.end();
   });
-
-  addUserActivity(email, req.url, null, newPurchase.price, newPurchase.items.map(({ name }) => name));
-
-  res.end();
 })
 
 app.get('/users-activities', (req, res) => {
@@ -268,9 +265,8 @@ app.put('/remove-product', (req, res) => {
       console.log("An error occured while writing Product JSON Object to File.");
       return console.log(err);
     }
+    res.end();
   });
-
-  res.end();
 })
 
 app.get('/lottry-status', (req, res) => {
@@ -317,17 +313,18 @@ app.post('/lottry', async (req, res) => {
   userLotteryStatus.win = lotteryNumber == 1;
   if (userLotteryStatus.win) userLotteryStatus.coupon = `FREE-MEAL-${ new Date().valueOf() }`;
 
-  fs.writeFile(LOTTERY_FILE, JSON.stringify({ ...lotteryStatuses, [email]: userLotteryStatus }), 'utf8', (err) => {
-    if (!err) return;
-    console.log("An error occured while writing Lottery JSON Object to File.");
-    return console.log(err);
+  fs.writeFile(LOTTERY_FILE, JSON.stringify({ ...lotteryStatuses, [email]: userLotteryStatus }), 'utf8', async (err) => {
+    if (err) {
+      console.log("An error occured while writing Lottery JSON Object to File.");
+      return console.log(err);
+    }
+
+    addUserActivity(email, req.url, null, null, null, userLotteryStatus.win, userLotteryStatus.coupon);
+
+    if (process.env.NODE_ENV !== 'test') await new Promise((resolve) => { setTimeout(resolve, 1000 * 3) });
+
+    res.json({ ...userLotteryStatus });
   });
-
-  addUserActivity(email, req.url, null, null, null, userLotteryStatus.win, userLotteryStatus.coupon);
-
-  await new Promise((resolve) => { setTimeout(resolve, 1000 * 3) });
-
-  res.json({ ...userLotteryStatus });
 })
 
 function setCookieAndSession(email, password, rememberMe, res) {
@@ -372,3 +369,12 @@ function addUserActivity(email, path, item = null, price = null, items = null, l
     }
   });
 }
+
+function getShortPass(req) {
+  if (req.cookies && req.cookies.shortPass) return req.cookies.shortPass;
+  return '';
+}
+
+module.exports = app.listen(port, () => {
+  console.log(`Listening on port: ${ port }`);
+})
