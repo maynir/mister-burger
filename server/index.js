@@ -265,9 +265,8 @@ app.put('/remove-product', (req, res) => {
       console.log("An error occured while writing Product JSON Object to File.");
       return console.log(err);
     }
+    res.end();
   });
-
-  res.end();
 })
 
 app.get('/lottry-status', (req, res) => {
@@ -314,17 +313,18 @@ app.post('/lottry', async (req, res) => {
   userLotteryStatus.win = lotteryNumber == 1;
   if (userLotteryStatus.win) userLotteryStatus.coupon = `FREE-MEAL-${ new Date().valueOf() }`;
 
-  fs.writeFile(LOTTERY_FILE, JSON.stringify({ ...lotteryStatuses, [email]: userLotteryStatus }), 'utf8', (err) => {
-    if (!err) return;
-    console.log("An error occured while writing Lottery JSON Object to File.");
-    return console.log(err);
+  fs.writeFile(LOTTERY_FILE, JSON.stringify({ ...lotteryStatuses, [email]: userLotteryStatus }), 'utf8', async (err) => {
+    if (err) {
+      console.log("An error occured while writing Lottery JSON Object to File.");
+      return console.log(err);
+    }
+
+    addUserActivity(email, req.url, null, null, null, userLotteryStatus.win, userLotteryStatus.coupon);
+
+    if (process.env.NODE_ENV !== 'test') await new Promise((resolve) => { setTimeout(resolve, 1000 * 3) });
+
+    res.json({ ...userLotteryStatus });
   });
-
-  addUserActivity(email, req.url, null, null, null, userLotteryStatus.win, userLotteryStatus.coupon);
-
-  await new Promise((resolve) => { setTimeout(resolve, 1000 * 3) });
-
-  res.json({ ...userLotteryStatus });
 })
 
 function setCookieAndSession(email, password, rememberMe, res) {

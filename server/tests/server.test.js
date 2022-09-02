@@ -31,6 +31,7 @@ describe('Server end points', () => {
 
   beforeAll(() => {
     jest.useFakeTimers().setSystemTime(new Date('2020-01-01'));
+    fs.unlink = jest.fn();
   })
 
   it('User not logged in in', async () => {
@@ -217,6 +218,42 @@ describe('Server end points', () => {
     expect(res.body.activities).toEqual([{ "email": "user_email", "path": "/login", "time": "1/1/2020, 2:00:00 AM" }, { "email": "user_email", "path": "/log-out", "time": "1/1/2020, 2:00:00 AM" }, { "email": "user_email", "path": "/login", "time": "1/1/2020, 2:00:00 AM" }, { "email": "user_email", "item": "main_product", "path": "/add-to-cart", "time": "1/1/2020, 2:00:00 AM" }, { "email": "user_email", "path": "/remove-from-cart", "time": "1/1/2020, 2:00:00 AM" }, { "email": "user_email", "path": "/remove-from-cart", "time": "1/1/2020, 2:00:00 AM" }, { "email": "user_email", "path": "/remove-from-cart", "time": "1/1/2020, 2:00:00 AM" }, { "email": "user_email", "items": ["main_product"], "path": "/purchase", "price": 20, "time": "1/1/2020, 2:00:00 AM" }, { "email": "user_email", "path": "/log-out", "time": "1/1/2020, 2:00:00 AM" }, { "email": "admin", "path": "/login", "time": "1/1/2020, 2:00:00 AM" }]);
   })
 
+  it('Remove product', async () => {
+    const res = await request(app).put('/remove-product').send({ productType: 'main', productName: 'main_product' }).set('Cookie', `shortPass=${ md5('admin') }`);
+    expect(res.statusCode).toEqual(200);
+
+    const productRes = await request(app).get('/products');
+    expect(productRes.body.products).toEqual({ ...products, "main": {} });
+  })
+
+  it('Lottery status user not participated', async () => {
+    const res = await request(app).get('/lottry-status').set('Cookie', `shortPass=${ md5('admin') }`);
+    expect(res.body).toEqual({ status: 'not_participated' });
+  })
+
+  it('Lottery try win', async () => {
+    jest.spyOn(global.Math, 'floor').mockReturnValue(1);
+    const res = await request(app).post('/lottry').set('Cookie', `shortPass=${ md5('admin') }`);
+    expect(res.body).toEqual({ coupon: "FREE-MEAL-1577836800000", lotteryDate: "2020-01-01T00:00:00.000Z", status: "participated", win: true });
+  })
+
+  it('Lottery status user after user won', async () => {
+    const res = await request(app).get('/lottry-status').set('Cookie', `shortPass=${ md5('admin') }`);
+    fs.writeFile('./server/tests/database_files/lottery.json', JSON.stringify({}), 'utf8', async () => { });
+    expect(res.body).toEqual({ coupon: "FREE-MEAL-1577836800000", lotteryDate: "2020-01-01T00:00:00.000Z", status: "participated", win: true });
+  })
+
+  it('Lottery try lost', async () => {
+    jest.spyOn(global.Math, 'floor').mockReturnValue(0);
+    const res = await request(app).post('/lottry').set('Cookie', `shortPass=${ md5('admin') }`);
+    expect(res.body).toEqual({ lotteryDate: "2020-01-01T00:00:00.000Z", status: "participated", win: false });
+  })
+
+  it('Lottery status user after user didnt win', async () => {
+    const res = await request(app).get('/lottry-status').set('Cookie', `shortPass=${ md5('admin') }`);
+    expect(res.body).toEqual({ lotteryDate: "2020-01-01T00:00:00.000Z", status: "participated", win: false });
+  })
+
   // resete json files
   afterAll(() => {
     databaseFiles.forEach((fileName) => {
@@ -225,5 +262,6 @@ describe('Server end points', () => {
     fs.writeFile('./server/tests/database_files/users.json', JSON.stringify({ admin: 'admin' }), 'utf8', () => { });
     fs.writeFile('./server/tests/database_files/user_activity.json', JSON.stringify({ activities: [] }), 'utf8', () => { });
     fs.writeFile('./server/tests/database_files/products.json', JSON.stringify(products), 'utf8', () => { });
+    jest.spyOn(global.Math, 'floor').mockRestore();
   });
 })
